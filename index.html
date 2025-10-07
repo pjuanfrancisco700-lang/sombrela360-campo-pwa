@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <title>Sombrela 360 — Control de Ventas</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Sombrela 360">
+  <meta name="theme-color" content="#F2F2F7">
+  <link rel="manifest" href="manifest.webmanifest?v=1">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=1">
+  <link rel="apple-touch-icon" sizes="167x167" href="icons/app-167.png?v=1">
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/app-152.png?v=1">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/app-32.png?v=1">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/app-16.png?v=1">
+  <style>
+    :root{--bg:#F2F2F7;--surface:#fff;--text:#0A0A0A;--muted:#6B7280;--brand:#0A84FF;--ok:#34C759;--warn:#FFCC00;--danger:#FF3B30;--border:#E5E7EB;--shadow:0 6px 20px rgba(0,0,0,.06);--radius:16px}
+    *{box-sizing:border-box} html,body{height:100%} body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial;background:var(--bg);color:var(--text)}
+    .app{max-width:420px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
+    .topbar{position:sticky;top:0;z-index:10;background:var(--bg);backdrop-filter:saturate(180%) blur(10px);display:flex;align-items:center;justify-content:center;padding:10px 12px;border-bottom:1px solid var(--border)}
+    .tabs{display:flex;gap:10px}
+    .tab{appearance:none;border:none;background:transparent;padding:8px 10px;border-radius:12px;display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:600;cursor:pointer}
+    .tab svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .tab.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+    main{padding:12px;flex:1} section{display:none} section.active{display:block}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin-bottom:14px}
+    .card h3{margin:0 0 8px 0;font-size:16px}
+    .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+    .pill{font-size:12px;color:var(--muted);border:1px solid var(--border);background:#F7F7FB;padding:4px 10px;border-radius:999px}
+    .big{font-size:26px;font-weight:800;letter-spacing:.2px}
+    .subrow{display:flex;gap:16px;align-items:center;color:var(--muted);font-size:13px;margin-top:8px;justify-content:space-between}
+    .progress{height:12px;border-radius:999px;background:#EEE;overflow:hidden;border:1px solid var(--border);margin-top:8px}
+    .progress>div{height:100%;width:0%;transition:width .4s ease;border-radius:999px}
+    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+    input,select{width:100%;padding:10px;border-radius:12px;border:1px solid var(--border);background:#FBFBFE;font-size:14px} input[type=number]{appearance:textfield}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:12px;border:1px solid var(--border);background:var(--surface);font-weight:700;font-size:14px;cursor:pointer}
+    .btn.primary{background:var(--brand);border-color:transparent;color:#fff} .btn.danger{background:var(--danger);color:#fff;border-color:transparent}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px} table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px solid var(--border);font-size:12px;text-align:left} th{color:var(--muted);font-weight:700}
+    .collapsible{border-top:1px dashed var(--border);margin-top:8px;padding-top:8px}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;padding:16px}
+    .modal.active{display:flex} .modal-card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:14px}
+    @media (max-width:480px){.app{max-width:100%} main{padding:10px} .card{padding:12px;margin-bottom:12px} .tab span{display:none} .tabs{gap:6px} .big{font-size:24px}}
+    @media (max-width:360px){.btn{padding:8px 10px;font-size:13px} .big{font-size:22px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <nav class="tabs" role="tablist" aria-label="Barra de menú">
+        <button class="tab active" data-tab="dashboard" aria-selected="true" title="Dashboard">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
+        </button>
+        <button class="tab" data-tab="ventas" title="Registro de ventas">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><text x="12" y="16" text-anchor="middle" font-size="12" font-family="system-ui" fill="currentColor">$</text></svg>
+        </button>
+        <button class="tab" data-tab="clientes" title="Cliente nuevo">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        </button>
+        <button class="tab" data-tab="config" title="Configuración">
+          <svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/><circle cx="8" cy="7" r="1.8"/><circle cx="16" cy="12" r="1.8"/><circle cx="10" cy="17" r="1.8"/></svg>
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="dashboard" class="active" role="tabpanel">
+        <div class="card"><div class="card-head"><h3>Presupuesto General</h3></div><div class="big" id="kpi-presupuesto">Q0.00</div><div class="progress"><div id="progress-bar" style="width:0%"></div></div><div class="subrow"><span>Total vendido: <strong id="kpi-vendido">Q0.00</strong></span><span>Faltante: <strong id="kpi-falta">Q0.00</strong></span></div></div>
+        <div class="card"><div class="card-head"><h3>Indicadores Generales</h3></div><div class="subrow"><div><div class="muted">Avance general</div><div class="big" id="kpi-global-avance">0.0%</div></div><div style="text-align:right"><div class="muted">Proyección cierre</div><div class="big" id="kpi-global-proy">Q0.00</div></div></div><div class="muted" id="coach-msg">Aún lejos, impulsa ventas</div></div>
+        <div class="card"><div class="card-head"><h3>Ventas con Congelador</h3><span class="pill"><span id="kpi-vcc-clientes">0</span> clientes</span></div><div class="big" id="kpi-vcc">Q0.00</div><div class="muted">Avance vs Presupuesto General: <strong id="kpi-vcc-avance">0%</strong></div><div class="muted">Proyección cierre: <strong id="kpi-vcc-proy">Q0.00</strong></div></div>
+        <div class="card"><div class="card-head"><h3>Ventas sin Congelador</h3><span class="pill"><span id="kpi-vsc-clientes">0</span> clientes</span></div><div class="big" id="kpi-vsc">Q0.00</div><div class="muted">Avance vs Q400: <strong id="kpi-vsc-avance">0%</strong></div><div class="muted">Proyección cierre: <strong id="kpi-vsc-proy">Q0.00</strong></div></div>
+      </section>
+
+      <section id="ventas" role="tabpanel">
+        <div class="card"><div class="card-head"><h3>Ventas con congelador</h3></div><div class="row"><div><label>Cliente</label><select id="sel-vcc"></select></div><div><label>Monto (Q)</label><input id="monto-vcc" type="number" inputmode="decimal" placeholder="0.00"/></div></div><div class="toolbar"><button class="btn primary" id="add-vcc">Agregar venta</button></div></div>
+        <div class="card"><div class="card-head"><h3>Ventas sin congelador</h3></div><div class="row"><div><label>Cliente</label><select id="sel-vsc"></select></div><div><label>Monto (Q)</label><input id="monto-vsc" type="number" inputmode="decimal" placeholder="0.00"/></div></div><div class="toolbar"><button class="btn primary" id="add-vsc">Agregar venta</button></div></div>
+        <div class="card"><div class="card-head"><h3>Historial de ventas</h3></div><table id="tabla-ventas"><thead><tr><th>Fecha</th><th>Tipo</th><th>Cliente</th><th>Monto</th><th>Acciones</th></tr></thead><tbody></tbody></table></div>
+      </section>
+
+      <section id="clientes" role="tabpanel">
+        <div class="card"><div class="card-head"><h3>Crear cliente</h3></div><div class="row"><div><label>Nombre del negocio</label><input id="cliente-nombre" placeholder="Ej. Tienda Emanuel"/></div><div><label>Tipo</label><select id="cliente-tipo"><option value="congelador">Con congelador</option><option value="sin">Sin congelador</option></select></div></div><div class="toolbar"><button class="btn primary" id="btn-add-cliente">Agregar cliente</button></div><div class="collapsible"><button class="btn" id="toggle-db">Mostrar/Ocultar base de datos</button><div id="db-list" style="display:none;margin-top:8px"></div></div></div>
+      </section>
+
+      <section id="config" role="tabpanel">
+        <div class="card"><div class="card-head"><h3>Periodo y parámetros</h3></div><div class="row"><div><label>Mes</label><select id="cfg-mes"></select></div><div><label>Año</label><select id="cfg-anio"></select></div></div><div class="row" style="margin-top:10px"><div><label>Ruta</label><input id="cfg-ruta" placeholder="17029"/></div><div><label>Días hábiles</label><input id="cfg-dias" type="number" value="26"/></div></div><div class="row" style="margin-top:10px"><div><label>Presupuesto general (Q)</label><input id="cfg-presupuesto" type="number" inputmode="decimal" placeholder="0.00"/></div><div><label>Ventas sin congelador (Q)</label><input id="cfg-vsc" type="number" value="400" disabled/></div></div><div class="row" style="margin-top:10px"><div><label>Sync URL (Google Apps Script)</label><input id="cfg-sync" placeholder="https://script.google.com/.../exec"/></div><div><label>Token (opcional)</label><input id="cfg-token" placeholder="secreto123"/></div></div><div class="toolbar"><button class="btn primary" id="btn-guardar">GUARDAR</button><button class="btn danger" id="btn-reset">REINICIAR</button></div></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" id="modal-edit">
+    <div class="modal-card">
+      <h3>Editar venta</h3>
+      <div class="row" style="margin-top:8px">
+        <div><label>Monto (Q)</label><input id="edit-monto" type="number" inputmode="decimal" /></div>
+        <div><label>Fecha</label><input id="edit-fecha" type="date" /></div>
+      </div>
+      <div class="toolbar"><button class="btn" id="edit-cancel">Cancelar</button><button class="btn primary" id="edit-save">Guardar cambios</button></div>
+    </div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js')); }
+    const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+    const todayStr=()=>new Date().toISOString().slice(0,10);
+    const Q=n=>new Intl.NumberFormat('es-GT',{style:'currency',currency:'GTQ',minimumFractionDigits:2}).format(n||0);
+    const KEY_CFG='s360_cfg', KEY_CLIENTS='s360_clients', KEY_SALES='s360_sales';
+    const uid=()=> (self.crypto&&crypto.randomUUID?crypto.randomUUID():('id-'+Date.now()+'-'+Math.random().toString(16).slice(2)));
+    const DEFAULT_DB={"17029":{"congelador":["Caseta Azul (Ixcanal)","Super 24 Sanarate Centro","Tienda Norma (Ixcanal)","Tienda Mónica","Tienda Helados Flor","Tienda y Librería Compu Game","Tienda Marissa 2","Tienda Magaly","Tienda Marissa","Super 24 Minerva","Super 24 El Rancho","Librería AMC"],"sin":["Variedades Génesis","Comedor Mary","Tienda Yanira","H&S;","Tienda Escobar","Tienda San José","Tienda Sanic"]},"17030":{"congelador":["Super 24 Conacaston Sanarate","super 24 El Rancho 3"],"sin":["Internet Velasquez","Tienda Kleidy","Negocios Estrada","CR GYM"]},"17031":{"congelador":[],"sin":[]},"17032":{"congelador":[],"sin":[]},"17033":{"congelador":[],"sin":[]},"17034":{"congelador":[],"sin":[]},"17035":{"congelador":[],"sin":[]}};
+    let cfg=load(KEY_CFG)||((d)=>({mes:d.getMonth()+1,anio:d.getFullYear(),ruta:'17029',dias:26,presupuesto:0,vscMeta:400,syncUrl:'',token:''}))(new Date());
+    let db=load(KEY_CLIENTS)||DEFAULT_DB; let sales=load(KEY_SALES)||[];
+    function save(k,v){ localStorage.setItem(k, JSON.stringify(v)); } function load(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch{ return null } }
+    function initTabs(){ $$('.tab').forEach(btn=>{ btn.onclick=()=>{ $$('.tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const id=btn.dataset.tab; $$('main section').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); if(id==='ventas') buildClientSelects(); if(id==='clientes') renderDBList(); };}); }
+    function initConfigSelectors(){ const m=$('#cfg-mes'),a=$('#cfg-anio'); const meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; if(m) m.innerHTML=meses.map((n,i)=>`<option value="${i+1}">${n}</option>`).join(''); if(a) a.innerHTML=Array.from({length:6},(_,k)=>cfg.anio-1+k).map(y=>`<option value="${y}">${y}</option>`).join(''); if(m) m.value=cfg.mes; if(a) a.value=cfg.anio; if($('#cfg-ruta')) $('#cfg-ruta').value=cfg.ruta; if($('#cfg-dias')) $('#cfg-dias').value=cfg.dias; if($('#cfg-presupuesto')) $('#cfg-presupuesto').value=cfg.presupuesto; if($('#cfg-vsc')) $('#cfg-vsc').value=cfg.vscMeta; if($('#cfg-sync')) $('#cfg-sync').value=cfg.syncUrl||''; if($('#cfg-token')) $('#cfg-token').value=cfg.token||'';
+      if($('#btn-guardar')) $('#btn-guardar').onclick=()=>{ cfg.mes=+m.value; cfg.anio=+a.value; cfg.ruta=$('#cfg-ruta').value.trim()||cfg.ruta; cfg.dias=Math.max(1,+$('#cfg-dias').value||26); cfg.presupuesto=Math.max(0,+$('#cfg-presupuesto').value||0); cfg.vscMeta=400; cfg.syncUrl=($('#cfg-sync').value||'').trim(); cfg.token=($('#cfg-token').value||'').trim(); save(KEY_CFG,cfg); renderAll(); alert('Configuración guardada'); };
+      if($('#btn-reset')) $('#btn-reset').onclick=()=>{ if(confirm('Esto borrará todas las ventas del mes actual. ¿Continuar?')){ sales=sales.filter(v=>!(v.ruta===cfg.ruta&&v.anio===cfg.anio&&v.mes===cfg.mes)); save(KEY_SALES,sales); renderAll(); alert('Mes reiniciado.'); } }; }
+    function buildClientSelects(){ const route=db[cfg.ruta]||{congelador:[],sin:[]}; if($('#sel-vcc')) $('#sel-vcc').innerHTML=route.congelador.map(n=>`<option>${n}</option>`).join(''); if($('#sel-vsc')) $('#sel-vsc').innerHTML=route.sin.map(n=>`<option>${n}</option>`).join(''); }
+    if($('#add-vcc')) $('#add-vcc').onclick=()=>addVenta('congelador',$('#sel-vcc').value,+$('#monto-vcc').value||0); if($('#add-vsc')) $('#add-vsc').onclick=()=>addVenta('sin',$('#sel-vsc').value,+$('#monto-vsc').value||0);
+    async function addVenta(tipo,cliente,monto){ if(!cliente){alert('Selecciona un cliente.');return} if(!(monto>0)){alert('Ingresa un monto válido.');return} const v={id:uid(),fecha:todayStr(),tipo,cliente,monto:+monto,ruta:cfg.ruta,mes:cfg.mes,anio:cfg.anio}; sales.push(v); save(KEY_SALES,sales); if($('#monto-vcc')) $('#monto-vcc').value=''; if($('#monto-vsc')) $('#monto-vsc').value=''; renderAll(); if(cfg.syncUrl){ try{ await fetch(cfg.syncUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:v.id,fecha:v.fecha,tipo:v.tipo,cliente:v.cliente,monto:v.monto,ruta:v.ruta,mes:v.mes,anio:v.anio,token:cfg.token||''})}); }catch(e){} } }
+    function renderVentasTable(){ const tbody=$('#tabla-ventas tbody'); if(!tbody) return; const list=currentSales(); tbody.innerHTML=list.map(v=>`<tr><td>${v.fecha}</td><td>${v.tipo==='congelador'?'Con congelador':'Sin congelador'}</td><td>${escapeHtml(v.cliente)}</td><td>${Q(v.monto)}</td><td><button class='btn' data-edit='${v.id}'>Editar</button> <button class='btn danger' data-del='${v.id}'>Borrar</button></td></tr>`).join(''); tbody.querySelectorAll('button[data-edit]').forEach(b=>b.onclick=()=>openEdit(b.dataset.edit)); tbody.querySelectorAll('button[data-del]').forEach(b=>b.onclick=()=>delVenta(b.dataset.del)); }
+    function openEdit(id){ const v=sales.find(x=>x.id===id); if(!v) return; const m=document.getElementById('modal-edit'); m.classList.add('active'); document.getElementById('edit-monto').value=v.monto; document.getElementById('edit-fecha').value=v.fecha; document.getElementById('edit-save').onclick=()=>{ const nuevo=+document.getElementById('edit-monto').value||0; if(!(nuevo>0)) return alert('Monto inválido'); const f=document.getElementById('edit-fecha').value||todayStr(); v.monto=nuevo; v.fecha=f; save(KEY_SALES,sales); m.classList.remove('active'); renderAll(); }; document.getElementById('edit-cancel').onclick=()=> m.classList.remove('active'); }
+    function delVenta(id){ if(!confirm('¿Eliminar esta venta?')) return; sales=sales.filter(v=>v.id!==id); save(KEY_SALES,sales); renderAll(); }
+    function currentSales(){ return sales.filter(v=>v.ruta===cfg.ruta && v.mes===cfg.mes && v.anio===cfg.anio).sort((a,b)=> b.fecha.localeCompare(a.fecha)); }
+    if(document.getElementById('btn-add-cliente')) document.getElementById('btn-add-cliente').onclick=()=>{ const nombre=document.getElementById('cliente-nombre').value.trim(); const tipo=document.getElementById('cliente-tipo').value; if(!nombre) return alert('Escribe el nombre del negocio'); if(!db[cfg.ruta]) db[cfg.ruta]={congelador:[],sin:[]}; const arr=tipo==='congelador'?db[cfg.ruta].congelador:db[cfg.ruta].sin; arr.push(nombre); save(KEY_CLIENTS,db); document.getElementById('cliente-nombre').value=''; buildClientSelects(); renderDBList(); alert('Cliente agregado a la ruta '+cfg.ruta); };
+    if(document.getElementById('toggle-db')) document.getElementById('toggle-db').onclick=()=>{ const el=document.getElementById('db-list'); el.style.display=el.style.display==='none'?'block':'none'; if(el.style.display==='block') renderDBList(); };
+    function renderDBList(){ const wrap=document.getElementById('db-list'); if(!wrap) return; const route=db[cfg.ruta]||{congelador:[],sin:[]}; wrap.innerHTML=`<div class='subrow'><span class='muted'>Ruta <strong>${escapeHtml(cfg.ruta)}</strong></span><span class='pill'>${route.congelador.length} con · ${route.sin.length} sin</span></div><div style='display:grid;gap:8px;margin-top:8px'><div><h3>Listado A (congelador)</h3><ul style='margin:6px 0 0 16px'>${route.congelador.map(c=>`<li>${escapeHtml(c)}</li>`).join('')||'<li><em>Vacío</em></li>'}</ul></div><div><h3>Listado B (sin congelador)</h3><ul style='margin:6px 0 0 16px'>${route.sin.map(c=>`<li>${escapeHtml(c)}</li>`).join('')||'<li><em>Vacío</em></li>'}</ul></div></div>`; }
+    function renderDashboard(){ const list=currentSales(); const total=sum(list); const vcc=sum(list.filter(v=>v.tipo==='congelador')); const vsc=sum(list.filter(v=>v.tipo==='sin')); const clVcc=new Set(list.filter(v=>v.tipo==='congelador').map(v=>v.cliente)).size; const clVsc=new Set(list.filter(v=>v.tipo==='sin').map(v=>v.cliente)).size; setText('#kpi-presupuesto',Q(cfg.presupuesto)); setText('#kpi-vendido',Q(total)); const falta=Math.max(0,cfg.presupuesto-total); setText('#kpi-falta',Q(falta)); const avance=cfg.presupuesto>0?(total/cfg.presupuesto*100):0; document.getElementById('progress-bar').style.width=Math.min(100,avance).toFixed(1)+'%'; document.getElementById('progress-bar').style.background=avance>=100?'var(--ok)':(avance>=60?'var(--warn)':'var(--danger)'); setText('#kpi-global-avance',`${avance.toFixed(1)}%`); const hoy=new Date(); const diasTrans=Math.max(1,Math.min(cfg.dias,hoy.getDate())); const promDia=total/diasTrans; const proy=Math.round(promDia*cfg.dias*100)/100; setText('#kpi-global-proy',Q(proy)); setText('#coach-msg', avance>=100?'¡Meta cumplida! Buen trabajo':(avance>=60?'¡Casi! Mantén el ritmo':'Aún lejos, impulsa ventas')); setText('#kpi-vcc',Q(vcc)); setText('#kpi-vcc-clientes',clVcc); const avVcc=cfg.presupuesto?(vcc/cfg.presupuesto*100):0; setText('#kpi-vcc-avance',`${avVcc.toFixed(1)}%`); setText('#kpi-vcc-proy',Q(Math.round((vcc/diasTrans*cfg.dias)*100)/100)); setText('#kpi-vsc',Q(vsc)); setText('#kpi-vsc-clientes',clVsc); const avVsc=cfg.vscMeta>0?(vsc/cfg.vscMeta*100):0; setText('#kpi-vsc-avance',`${avVsc.toFixed(1)}%`); setText('#kpi-vsc-proy',Q(Math.round((vsc/diasTrans*cfg.dias)*100)/100)); }
+    function setText(sel,val){ const el=document.querySelector(sel); if(el) el.textContent=val; } function sum(arr){ return arr.reduce((a,b)=>a+(+b.monto||0),0); } function escapeHtml(s){ return (s+'').replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;","\"":"&quot;","'":"&#39;","<":"&lt;",">":"&gt;"}[m])); }
+    function renderAll(){ buildClientSelects(); renderVentasTable(); renderDashboard(); }
+    initTabs(); initConfigSelectors(); renderAll();
+  </script>
+</body>
+</html>
