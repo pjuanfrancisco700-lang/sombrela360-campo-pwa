@@ -190,7 +190,7 @@
             <span class="pill"><span id="kpi-vcc-clientes">0</span> clientes</span>
           </div>
           <div class="big" id="kpi-vcc">Q0.00</div>
-          <div class="muted">Avance vs Presupuesto General: <strong id="kpi-vcc-avance">0%</strong></div>
+          <div class="muted">Avance vs <span id="kpi-vcc-presupuesto-label">Q0.00</span>: <strong id="kpi-vcc-avance">0%</strong></div>
           <div class="muted">Proyección cierre: <strong id="kpi-vcc-proy">Q0.00</strong></div>
         </div>
         <div class="card">
@@ -199,7 +199,7 @@
             <span class="pill"><span id="kpi-vsc-clientes">0</span> clientes</span>
           </div>
           <div class="big" id="kpi-vsc">Q0.00</div>
-          <div class="muted">Avance vs meta: <strong id="kpi-vsc-avance">0%</strong></div>
+          <div class="muted">Avance vs <span id="kpi-vsc-meta-label">Q0.00</span>: <strong id="kpi-vsc-avance">0%</strong></div>
           <div class="muted">Proyección cierre: <strong id="kpi-vsc-proy">Q0.00</strong></div>
         </div>
       </section>
@@ -766,12 +766,14 @@
       setText('#kpi-vcc-clientes', clVcc);
       const avVcc = cfg.presupuesto ? (vcc / cfg.presupuesto * 100) : 0;
       setText('#kpi-vcc-avance', `${avVcc.toFixed(1)}%`);
+      setText('#kpi-vcc-presupuesto-label', Q(cfg.presupuesto));
       setText('#kpi-vcc-proy', Q(Math.round((vcc / diasTrans * cfg.dias) * 100) / 100));
 
       setText('#kpi-vsc', Q(vsc));
       setText('#kpi-vsc-clientes', clVsc);
       const avVsc = cfg.vscMeta > 0 ? (vsc / cfg.vscMeta * 100) : 0;
       setText('#kpi-vsc-avance', `${avVsc.toFixed(1)}%`);
+      setText('#kpi-vsc-meta-label', Q(cfg.vscMeta));
       setText('#kpi-vsc-proy', Q(Math.round((vsc / diasTrans * cfg.dias) * 100) / 100));
     }
 
