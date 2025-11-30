@@ -60,7 +60,7 @@
     th,td{padding:8px;border-bottom:1px solid var(--border);font-size:12px;text-align:left}
     th{color:var(--muted);font-weight:700}
     .collapsible{border-top:1px dashed var(--border);margin-top:8px;padding-top:8px}
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;padding:16px}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:30}
     .modal.active{display:flex}
     .modal-card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:14px}
     @media (max-width:480px){.app{max-width:100%} main{padding:10px} .card{padding:12px;margin-bottom:12px} .tab span{display:none} .tabs{gap:6px} .big{font-size:24px}}
@@ -477,6 +477,18 @@
       "17035": { "congelador": [], "sin": [] }
     };
 
+    function save(k, v) {
+      localStorage.setItem(k, JSON.stringify(v));
+    }
+
+    function load(k) {
+      try {
+        return JSON.parse(localStorage.getItem(k));
+      } catch {
+        return null;
+      }
+    }
+
     let cfg = load(KEY_CFG) || ((d) => ({
       mes: d.getMonth() + 1,
       anio: d.getFullYear(),
@@ -493,18 +505,6 @@
 
     const initialTheme = (typeof localStorage !== 'undefined' && localStorage.getItem(KEY_THEME)) || 'original';
     applyTheme(initialTheme);
-
-    function save(k, v) {
-      localStorage.setItem(k, JSON.stringify(v));
-    }
-
-    function load(k) {
-      try {
-        return JSON.parse(localStorage.getItem(k));
-      } catch {
-        return null;
-      }
-    }
 
     function initTabs() {
       $$('.tab').forEach(btn => {
