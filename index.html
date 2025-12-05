@@ -19,12 +19,12 @@
     *{box-sizing:border-box} html,body{height:100%} body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial;background:var(--bg);color:var(--text)}
     .app{max-width:420px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
     .topbar{position:sticky;top:0;z-index:10;background:var(--bg);backdrop-filter:saturate(180%) blur(10px);display:flex;align-items:center;justify-content:center;padding:10px 12px;border-bottom:1px solid var(--border)}
-    .tabs{display:flex;gap:14px;justify-content:space-between;padding:4px 6px}
-    .tab{appearance:none;border:none;background:transparent;padding:10px 14px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--muted);font-weight:600;cursor:pointer;transition:all .18s ease}
-    .tab svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .tabs{display:flex;gap:10px;justify-content:space-between;padding:2px 4px}
+    .tab{appearance:none;border:none;background:transparent;padding:6px 10px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:6px;color:var(--muted);font-weight:600;cursor:pointer;transition:all .18s ease}
+    .tab svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
     .tab.active{background:var(--surface);color:var(--text);box-shadow:0 3px 10px rgba(0,0,0,.08);transform:translateY(-1px)}
     main{padding:12px;flex:1} section{display:none} section.active{display:block}
-    .card{min-height:160px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin-bottom:14px}
+    .card{min-height:110px;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);padding:8px;margin-bottom:4px}
     .card h3{margin:0 0 8px 0;font-size:16px}
     .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
     .pill{font-size:12px;color:var(--muted);border:1px solid var(--border);background:#F7F7FB;padding:4px 10px;border-radius:999px}
