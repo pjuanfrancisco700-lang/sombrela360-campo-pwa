@@ -10,816 +10,449 @@
   <meta name="theme-color" content="#F2F2F7">
   <link rel="manifest" href="manifest.webmanifest?v=1">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=1">
-  <link rel="apple-touch-icon" sizes="167x167" href="icons/app-167.png?v=1">
-  <link rel="apple-touch-icon" sizes="152x152" href="icons/app-152.png?v=1">
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/app-32.png?v=1">
-  <link rel="icon" type="image/png" sizes="16x16" href="icons/app-16.png?v=1">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=1">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=1">
   <style>
-    :root{--bg:#F2F2F7;--surface:#fff;--text:#0A0A0A;--muted:#6B7280;--brand:#2C6E7F;--ok:#34C759;--warn:#FFCC00;--danger:#FF3B30;--border:#E5E7EB;--shadow:0 6px 20px rgba(0,0,0,.06);--radius:16px}
-    *{box-sizing:border-box} html,body{height:100%} body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial;background:var(--bg);color:var(--text)}
+    :root{
+      --bg:#F2F2F7;--surface:#fff;--text:#111111;--muted:#6e6e73;--brand:#2C6E7F;
+      --ok:#34C759;--warn:#FFCC00;--danger:#FF3B30;--border:#E5E7EB;
+      --shadow:0 6px 20px rgba(0,0,0,.06)
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial;background:var(--bg);color:var(--text);-webkit-text-size-adjust:100%;touch-action:manipulation}
     .app{max-width:420px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
-    .topbar{position:sticky;top:0;z-index:10;background:var(--bg);backdrop-filter:saturate(180%) blur(10px);display:flex;align-items:center;justify-content:center;padding:10px 12px;border-bottom:1px solid var(--border)}
-    .tabs{display:flex;gap:10px;justify-content:space-between;padding:2px 4px}
-    .tab{appearance:none;border:none;background:transparent;padding:6px 10px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:6px;color:var(--muted);font-weight:600;cursor:pointer;transition:all .18s ease}
+    .topbar{position:sticky;top:0;z-index:20;background:rgba(242,242,247,.86);backdrop-filter:saturate(180%) blur(18px);display:flex;align-items:center;justify-content:center;padding:12px 12px 10px;border-bottom:1px solid rgba(229,231,235,.9)}
+    .tabs{display:flex;gap:8px;justify-content:center;align-items:center;padding:2px 0;width:100%}
+    .tab{appearance:none;border:none;background:transparent;padding:8px 0;border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;transition:.18s ease;min-height:40px;min-width:54px;flex:0 0 54px}
     .tab svg{width:22px;height:22px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
-    .tab.active{background:var(--surface);color:var(--text);box-shadow:0 3px 10px rgba(0,0,0,.08);transform:translateY(-1px)}
-    main{padding:12px;flex:1} section{display:none} section.active{display:block}
-    .card{min-height:110px;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);padding:8px;margin-bottom:4px}
-    .card h3{margin:0 0 8px 0;font-size:16px}
-    .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-    .pill{font-size:12px;color:var(--muted);border:1px solid var(--border);background:#F7F7FB;padding:4px 10px;border-radius:999px}
-    .big{font-size:22px;font-weight:800;letter-spacing:.2px}
-    .subrow{display:flex;gap:16px;align-items:center;color:var(--muted);font-size:13px;margin-top:8px;justify-content:space-between}
-    .kpi-main-row{margin-top:10px;gap:24px}
-    .kpi-block{display:flex;flex-direction:column;align-items:flex-start;flex:1}
-    .kpi-label{font-size:12px;color:var(--muted);font-weight:500}
-    .kpi-value{font-size:16px;font-weight:800;color:var(--text);letter-spacing:.2px}
-    .progress{height:12px;border-radius:999px;background:#EEE;overflow:hidden;border:1px solid var(--border);margin-top:8px}
-    .progress>div{height:100%;width:0%;transition:width .4s ease;border-radius:999px}
-    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
-    input,select{width:100%;padding:14px;border-radius:14px;border:1px solid var(--border);background:#FBFBFE;font-size:16px}
-    input[type=number]{appearance:textfield}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:12px;border:1px solid var(--border);background:var(--surface);font-weight:700;font-size:14px;cursor:pointer}
-    .btn.primary{
-      background:var(--brand);
-      border-color:transparent;
-      color:#fff;
-      transition:transform .15s ease, box-shadow .15s ease;
-    }
-    .btn.primary:active{
-      transform:scale(.97);
-      box-shadow:0 4px 12px rgba(44,110,127,0.45);
-    }
-    .btn.danger{background:var(--danger);color:#fff;border-color:transparent}
-    .btn.btn-theme{background:linear-gradient(135deg,#E6D8FF,#F3ECFF);border-color:transparent;color:#27115A;font-weight:700;box-shadow:0 4px 12px rgba(104,72,197,.25)}
-    .btn.btn-theme svg{width:16px;height:16px;stroke:#27115A;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
-    .btn.btn-theme span{font-size:13px}
-    .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .ventas-toolbar{position:sticky;bottom:0;padding-top:8px;padding-bottom:env(safe-area-inset-bottom,8px);background:linear-gradient(to top, rgba(242,242,247,0.98), rgba(242,242,247,0.85), transparent);z-index:5}
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:8px;border-bottom:1px solid var(--border);font-size:12px;text-align:left}
+    .tab.active{background:linear-gradient(180deg,#fff 0%,#fbfbfd 100%);color:var(--text);box-shadow:0 8px 20px rgba(15,23,42,.08);transform:translateY(-1px);border:1px solid rgba(229,231,235,.9)}
+    main{padding:10px 12px 14px;flex:1}
+    section{display:none}
+    section.active{display:block}
+    .card{background:linear-gradient(180deg,#ffffff 0%,#fbfbfd 100%);border:1px solid rgba(229,231,235,.9);border-radius:20px;box-shadow:0 12px 30px rgba(15,23,42,.07);padding:14px;margin-bottom:10px}
+    .card h3{margin:0;font-size:17px;font-weight:600;letter-spacing:-.01em}
+    .card-head,.subrow,.toolbar,.row{display:flex;gap:10px}
+    .card-head,.subrow,.row{align-items:center;justify-content:space-between}
+    .row>*{flex:1;min-width:0}
+    .pill{font-size:14px;color:#6B7280;border:1px solid rgba(229,231,235,.95);background:#F2F2F7;padding:5px 10px;border-radius:999px;font-weight:600}
+    .big{font-size:22px;font-weight:800;letter-spacing:-.01em;line-height:1.1;color:#111111}
+    .muted{color:#8e8e93;font-size:12px;font-weight:500}
+    .text-right{text-align:right}
+    .mt-8{margin-top:6px}
+    .mt-10{margin-top:8px}
+    .hidden{display:none!important}
+    .route-label{font-size:12px;color:var(--muted);font-weight:600}
+    .route-value{color:#8e8e93}
+    .kpi-block-end{text-align:right;align-items:flex-end}
+    .row-tight,.db-grid{gap:8px}
+    .db-list-ul{margin:6px 0 0 16px}
+    .db-grid{display:grid;margin-top:8px}
+    .subrow{margin-top:6px;align-items:flex-start}
+    .kpi-main-row{gap:24px}
+    .kpi-block{display:flex;flex-direction:column;flex:1}
+    .kpi-label{font-size:12px;color:var(--muted)}
+    .kpi-value{font-size:14px;font-weight:700;color:#111111}
+    .status-dot{display:inline-block;width:10px;height:10px;border-radius:999px;margin-right:8px;vertical-align:middle}
+    .status-ok{background:var(--ok)}
+    .status-warn{background:var(--warn)}
+    .status-danger{background:var(--danger)}
+    .semaforo-ok{border-color:rgba(52,199,89,.35);box-shadow:0 0 0 1px rgba(52,199,89,.08), var(--shadow)}
+    .semaforo-warn{border-color:rgba(255,204,0,.5);box-shadow:0 0 0 1px rgba(255,204,0,.10), var(--shadow)}
+    .semaforo-danger{border-color:rgba(255,59,48,.28);box-shadow:0 0 0 1px rgba(255,59,48,.08), var(--shadow)}
+    .status-line{margin-top:8px;font-size:13px;font-weight:700}
+    .progress{height:12px;border-radius:999px;background:linear-gradient(180deg,#f4f4f7,#e9e9ef);overflow:hidden;border:1px solid var(--border);margin-top:6px;box-shadow:inset 0 2px 4px rgba(0,0,0,.06)}
+    .progress>div{height:100%;width:0%;transition:width .45s ease;border-radius:999px;background:linear-gradient(90deg,var(--brand),#4fa3b6);box-shadow:0 2px 6px rgba(44,110,127,.35)}
+    label{font-size:12px;color:var(--muted);display:block;margin-bottom:7px;font-weight:700;letter-spacing:.01em}
+    input,select{width:100%;padding:14px;border-radius:14px;border:1px solid rgba(229,231,235,.95);background:#FBFBFE;font-size:16px;color:var(--text);box-shadow:inset 0 1px 0 rgba(255,255,255,.65)}
+    .ios-select{-webkit-appearance:none;appearance:none;border:1px solid var(--border);padding-right:42px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='8 10 12 14 16 10'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:18px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 14px;border-radius:14px;border:1px solid rgba(229,231,235,.95);background:linear-gradient(180deg,#fff 0%,#fafafd 100%);font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 4px 12px rgba(15,23,42,.04)}
+    .btn.primary{background:linear-gradient(180deg,#337d8f 0%,#2C6E7F 100%);border-color:transparent;color:#fff;box-shadow:0 10px 20px rgba(44,110,127,.22)}
+    .btn.danger{background:linear-gradient(180deg,#ff5d55 0%,var(--danger) 100%);color:#fff;border-color:transparent;box-shadow:0 10px 20px rgba(255,59,48,.18)}
+    .toolbar{flex-wrap:wrap;margin-top:10px}
+    .ventas-toolbar{position:sticky;bottom:0;padding-top:10px;padding-bottom:env(safe-area-inset-bottom,8px);background:linear-gradient(to top, rgba(242,242,247,.98), rgba(242,242,247,.9), transparent)}
+    .ventas-toolbar .btn.primary{width:100%}
+    table{width:100%;border-collapse:separate;border-spacing:0}
+    th,td{padding:10px 8px;border-bottom:1px solid rgba(229,231,235,.8);font-size:12px;text-align:left;vertical-align:top}
     th{color:var(--muted);font-weight:700}
     .collapsible{border-top:1px dashed var(--border);margin-top:8px;padding-top:8px}
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:30}
     .modal.active{display:flex}
-    .modal-card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:14px}
-    @media (max-width:480px){.app{max-width:100%} main{padding:10px} .card{padding:12px;margin-bottom:12px} .tab span{display:none} .tabs{gap:6px} .big{font-size:24px}}
-    @media (max-width:360px){.btn{padding:8px 10px;font-size:13px} .big{font-size:22px}}
-    /* Estilos extra que quedaron de versiones anteriores, no rompen nada */
-    .card-ventas{padding-top:18px;padding-bottom:18px}
-    .ventas-fields{display:flex;flex-direction:column;gap:12px}
-    .ventas-fields .field select,.ventas-fields .field input{padding:14px;border-radius:14px;font-size:16px}
-    .ventas-toolbar{margin-top:14px}
-    .ventas-toolbar .btn.primary{width:100%;justify-content:center;font-size:16px;padding:12px 14px}
-    .ios-select{
-      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial;
-      -webkit-appearance:none;
-      appearance:none;
-      border-radius:10px;
-      border:2px solid #B6C0CC;
-      background:linear-gradient(135deg,#F9FAFB,#F3F4F6);
-      padding:16px 46px 16px 16px;
-      font-size:17px;
-      font-weight:700;
-      font-weight:600;
-      color:#111827;
-      outline:none;
-      box-shadow:0 1px 3px rgba(15,23,42,0.08);
-      transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='8 10 12 14 16 10'/%3E%3C/svg%3E");
-      background-repeat:no-repeat;
-      background-position:right 12px center;
-      background-size:18px;
-    }
-    .ios-select:focus{
-      border-color:#2C6E7F;
-      box-shadow:0 3px 10px rgba(44,110,127,0.35);
-      background:linear-gradient(135deg,#FFFFFF,#F5FDF4);
-    }
-    .card-compact{min-height:110px;padding:10px 12px !important}
-    .card-compact .big{font-size:22px}
-    .card-compact .subrow{margin-top:4px}
-    .theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
-    .theme-option{border-radius:12px;border:1px solid var(--border);padding:8px 10px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:#FBFBFE;font-size:12px;cursor:pointer;transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease}
-    .theme-option:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.06)}
-    .theme-option.active{border-color:var(--brand);box-shadow:0 0 0 1px rgba(44,110,127,0.25)}
-    .theme-title{font-size:13px;font-weight:700}
-    .theme-sub{font-size:11px;color:var(--muted)}
-    .theme-dots{display:flex;gap:4px;margin-top:4px}
-    .theme-dot{width:12px;height:12px;border-radius:999px;border:1px solid rgba(0,0,0,.08)}
+    .modal-card{width:100%;max-width:400px;background:linear-gradient(180deg,#fff 0%,#fcfcfe 100%);border:1px solid rgba(229,231,235,.95);border-radius:20px;box-shadow:0 18px 48px rgba(15,23,42,.14);padding:16px}
+    .nc-wrap{display:flex;flex-direction:column;gap:12px}
+    .nc-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:16px;border:1px solid rgba(229,231,235,.95);background:linear-gradient(180deg,#fff 0%,#fbfbfe 100%);font-weight:800;color:var(--text);cursor:pointer;box-shadow:0 6px 16px rgba(15,23,42,.04)}
+    .nc-title{font-weight:800;font-size:16px;letter-spacing:-.02em}
+    .nc-sub{font-size:12px;color:var(--muted);font-weight:500}
+    .nc-list{max-height:min(52svh,460px);overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:4px 0}
+    .nc-item{padding:14px 0;border-bottom:1px solid #f0eff4;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px}
+    .nc-item:last-child{border-bottom:0}
+    .nc-left{min-width:0}.nc-truncate{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56vw}
+    .nc-chip{display:inline-flex;align-items:center;justify-content:center;min-width:34px;padding:5px 10px;border-radius:999px;background:#f5f4f7;color:#6f7482;border:1px solid var(--border);font-size:11px;font-weight:700}
+    .nc-mini-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+    .nc-kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+    .nc-k{background:linear-gradient(180deg,#fff 0%,#fcfbfd 100%);border:1px solid rgba(229,231,235,.95);border-radius:18px;padding:14px;box-shadow:0 8px 18px rgba(15,23,42,.04)}
+    .nc-k.full{grid-column:1/-1;background:linear-gradient(180deg,#1d2730 0%,#111827 100%);color:#fff}
+    .nc-k .label{margin-bottom:4px;font-weight:600}.nc-k .value{font-weight:800;letter-spacing:-.03em;font-size:17px}
+    .nc-k.full .label,.nc-note{color:#d1d5db}.nc-note{font-size:11px;margin-top:4px}
+    .nc-apply{background:var(--brand)!important;color:#fff!important;border-color:var(--brand)!important}
+    .nc-danger{border-color:#ffd9d6!important;color:var(--danger)!important;background:#fff!important}
+    .nc-sheet-modal{position:fixed;inset:0;z-index:60;background:rgba(17,17,17,.28);padding:18px;display:flex;align-items:flex-end;justify-content:center}
+    .nc-sheet{width:100%;max-width:420px;background:linear-gradient(180deg,#fff 0%,#fcfcfe 100%);border:1px solid rgba(229,231,235,.95);border-radius:26px 26px 0 0;box-shadow:0 -18px 48px rgba(15,23,42,.16);padding:16px 16px 20px}
+    .nc-handle{width:48px;height:5px;border-radius:999px;background:#d7d9df;margin:2px auto 14px}
+    .nc-stack{display:flex;flex-direction:column;gap:10px}.nc-divider{height:1px;background:#f0eff4;margin:14px 0}
+    .nc-cart-row{justify-content:space-between;gap:8px;align-items:center;border:1px solid rgba(229,231,235,.95);border-radius:14px;padding:10px;background:linear-gradient(180deg,#fff 0%,#fcfcfe 100%)}
+    .nc-actions button,.nc-sheet button,.nc-item button{padding:10px 12px;border-radius:14px;border:1px solid rgba(229,231,235,.95);background:linear-gradient(180deg,#fff 0%,#fafafd 100%);font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(15,23,42,.04)}
   </style>
 </head>
 <body>
   <div class="app">
     <header class="topbar">
       <nav class="tabs" role="tablist" aria-label="Barra de menú">
-        <button class="tab active" data-tab="dashboard" aria-selected="true" title="Dashboard">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <polyline points="4 16 9 11 13 14 20 7"/>
-            <polyline points="4 20 20 20"/>
-          </svg>
-        </button>
-        <button class="tab" data-tab="ventas" title="Registro de ventas">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4 6h2l1 9h10l1-6H8"/>
-            <circle cx="10" cy="18" r="2"/>
-            <circle cx="17" cy="18" r="2"/>
-          </svg>
-        </button>
-        <button class="tab" data-tab="clientes" title="Cliente nuevo">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <!-- Icono de cliente -->
-            <circle cx="12" cy="7" r="3.2"/>
-            <path d="M5.2 19a6.8 6.8 0 0 1 13.6 0"/>
-            <!-- Símbolo + más separado y más arriba -->
-            <line x1="20" y1="7.8" x2="20" y2="13.2"/>
-            <line x1="17.4" y1="10.5" x2="22.6" y2="10.5"/>
-          </svg>
-        </button>
-        <button class="tab" data-tab="config" title="Configuración">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <!-- Nuevo símbolo de configuración (estilo sliders / ajustes) -->
-            <line x1="6" y1="5" x2="18" y2="5"/>
-            <circle cx="14" cy="5" r="2"/>
-            <line x1="6" y1="12" x2="18" y2="12"/>
-            <circle cx="10" cy="12" r="2"/>
-            <line x1="6" y1="19" x2="18" y2="19"/>
-            <circle cx="16" cy="19" r="2"/>
-          </svg>
-        </button>
+        <button class="tab active" data-tab="dashboard" aria-selected="true" title="Dashboard"><svg viewBox="0 0 24 24"><polyline points="4 16 9 11 13 14 20 7"/><polyline points="4 20 20 20"/></svg></button>
+        <button class="tab" data-tab="ventas" title="Registro de ventas"><svg viewBox="0 0 24 24"><path d="M4 6h2l1 9h10l1-6H8"/><circle cx="10" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg></button>
+        <button class="tab" data-tab="clientes" title="Cliente nuevo"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.2"/><path d="M5.2 19a6.8 6.8 0 0 1 13.6 0"/><line x1="20" y1="7.8" x2="20" y2="13.2"/><line x1="17.4" y1="10.5" x2="22.6" y2="10.5"/></svg></button>
+        <button class="tab" data-tab="nc" title="NC"><svg viewBox="0 0 24 24"><path d="M7 4h7l5 5v11a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><polyline points="14 4 14 9 19 9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></button>
+        <button class="tab" data-tab="config" title="Configuración"><svg viewBox="0 0 24 24"><line x1="6" y1="5" x2="18" y2="5"/><circle cx="14" cy="5" r="2"/><line x1="6" y1="12" x2="18" y2="12"/><circle cx="10" cy="12" r="2"/><line x1="6" y1="19" x2="18" y2="19"/><circle cx="16" cy="19" r="2"/></svg></button>
       </nav>
     </header>
-
     <main>
-      <section id="dashboard" class="active" role="tabpanel">
+      <section id="dashboard" class="active">
         <div class="card">
           <div class="card-head">
             <h3>Presupuesto General</h3>
-            <span style="font-size:16px;color:var(--muted);font-weight:700">Ruta <span id="dash-ruta" style="color:#9CA3AF"></span></span>
+            <span class="route-label">Ruta <span id="dash-ruta" class="route-value"></span></span>
           </div>
           <div class="big" id="kpi-presupuesto">Q0.00</div>
-          <div class="progress"><div id="progress-bar" style="width:0%"></div></div>
+          <div class="progress"><div id="progress-bar"></div></div>
           <div class="subrow kpi-main-row">
-            <div class="kpi-block">
-              <span class="kpi-label">Total vendido</span>
-              <span class="kpi-value" id="kpi-vendido">Q0.00</span>
-            </div>
-            <div class="kpi-block" style="text-align:right;align-items:flex-end">
-              <span class="kpi-label">Faltante</span>
-              <span class="kpi-value" id="kpi-falta">Q0.00</span>
-            </div>
+            <div class="kpi-block"><span class="kpi-label">Total vendido</span><span class="kpi-value" id="kpi-vendido">Q0.00</span></div>
+            <div class="kpi-block kpi-block-end"><span class="kpi-label">Faltante</span><span class="kpi-value" id="kpi-falta">Q0.00</span></div>
           </div>
         </div>
-        <div class="card card-compact">
+
+        <div class="card" id="card-general">
           <div class="card-head"><h3>Indicadores Generales</h3></div>
           <div class="subrow">
-            <div>
-              <div class="muted">Avance general</div>
-              <div class="big" id="kpi-global-avance">0.0%</div>
-            </div>
-            <div style="text-align:right">
-              <div class="muted">Proyección cierre</div>
-              <div class="big" id="kpi-global-proy">Q0.00</div>
-            </div>
+            <div><div class="muted">Avance general</div><div class="big" id="kpi-global-avance">0.0%</div></div>
+            <div class="text-right"><div class="muted">Proyección cierre</div><div class="big" id="kpi-global-proy">Q0.00</div></div>
           </div>
-          <div class="muted" id="coach-msg">Aún lejos, impulsa ventas</div>
+          <div class="status-line" id="coach-msg"><span class="status-dot status-danger"></span>Aún lejos, impulsa ventas</div>
         </div>
-        <div class="card">
-          <div class="card-head">
-            <h3>Ventas con Congelador</h3>
-            <span class="pill"><span id="kpi-vcc-clientes">0</span> clientes</span>
-          </div>
-          <div class="big" id="kpi-vcc">Q0.00</div>
-          <div class="muted">Avance vs <span id="kpi-vcc-presupuesto-label">Q0.00</span>: <strong id="kpi-vcc-avance">0%</strong></div>
-          <div class="muted">Proyección cierre: <strong id="kpi-vcc-proy">Q0.00</strong></div>
+
+        <div class="card" id="card-cong">
+          <div class="card-head"><h3>Ventas con Congelador</h3><span class="pill" id="kpi-cong-clientes">0 clientes</span></div>
+          <div class="big" id="kpi-cong-total">Q0.00</div>
+          <div class="muted">Avance vs <span id="kpi-cong-meta">Q0.00</span>: <span class="kpi-value" id="kpi-cong-avance">0%</span></div>
+          <div class="muted mt-8">Proyección cierre: <span class="kpi-value" id="kpi-cong-proy">Q0.00</span></div>
         </div>
-        <div class="card">
-          <div class="card-head">
-            <h3>Ventas sin Congelador</h3>
-            <span class="pill"><span id="kpi-vsc-clientes">0</span> clientes</span>
-          </div>
-          <div class="big" id="kpi-vsc">Q0.00</div>
-          <div class="muted">Avance vs <span id="kpi-vsc-meta-label">Q0.00</span>: <strong id="kpi-vsc-avance">0%</strong></div>
-          <div class="muted">Proyección cierre: <strong id="kpi-vsc-proy">Q0.00</strong></div>
+
+        <div class="card" id="card-sin">
+          <div class="card-head"><h3>Ventas sin Congelador</h3><span class="pill" id="kpi-sin-clientes">0 clientes</span></div>
+          <div class="big" id="kpi-sin-total">Q0.00</div>
+          <div class="muted">Avance vs <span id="kpi-sin-meta">Q0.00</span>: <span class="kpi-value" id="kpi-sin-avance">0%</span></div>
+          <div class="muted mt-8">Proyección cierre: <span class="kpi-value" id="kpi-sin-proy">Q0.00</span></div>
         </div>
       </section>
 
-      <!-- VENTAS unificadas -->
-      <section id="ventas" role="tabpanel">
-        <div class="card">
-          <div class="card-head"><h3>Registrar venta</h3></div>
-          <div class="row">
-            <div>
-              <label>Tipo de cliente</label>
-              <select id="venta-tipo" class="ios-select">
-                <option value="congelador">Con congelador</option>
-                <option value="sin">Sin congelador</option>
-              </select>
-            </div>
-            <div>
-              <label>Cliente</label>
-              <input id="cliente-buscar" style="display:none;"/>
-              <select id="venta-cliente" class="ios-select"></select>
-            </div>
-          </div>
-          <div class="row" style="margin-top:8px">
-            <div>
-              <label>Monto (Q)</label>
-              <input id="venta-monto" type="number" inputmode="decimal" placeholder="0.00"/>
-            </div>
-          </div>
-          <div class="toolbar ventas-toolbar">
-            <button class="btn primary" id="add-venta">Agregar venta</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-head"><h3>Historial de ventas</h3></div>
-          <table id="tabla-ventas">
-            <thead>
-              <tr><th>Fecha</th><th>Tipo</th><th>Cliente</th><th>Monto</th><th>Acciones</th></tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section id="clientes" role="tabpanel">
-        <div class="card">
-          <div class="card-head"><h3>Crear cliente</h3></div>
-          <div class="row">
-            <div>
-              <label>Nombre del negocio</label>
-              <input id="cliente-nombre" placeholder="Ej. Tienda Emanuel"/>
-            </div>
-            <div>
-              <label>Tipo</label>
-              <select id="cliente-tipo" class="ios-select">
-                <option value="congelador">Con congelador</option>
-                <option value="sin">Sin congelador</option>
-              </select>
-            </div>
-          </div>
-          <div class="toolbar" style="justify-content:space-between">
-            <button class="btn primary" id="btn-add-cliente">Agregar cliente</button>
-          </div>
-          <div class="collapsible">
-            <button class="btn" id="toggle-db">Mostrar/Ocultar base de datos</button>
-            <div id="db-list" style="display:none;margin-top:8px"></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="config" role="tabpanel">
-        <div class="card">
-          <div class="card-head"><h3>Periodo y parámetros</h3></div>
-          <div class="row">
-            <div>
-              <label>Mes / Año</label>
-              <div style="display:flex;gap:8px">
-                <select id="cfg-mes" class="ios-select" style="flex:1"></select>
-                <select id="cfg-anio" class="ios-select" style="flex:1"></select>
-              </div>
-            </div>
-          </div>
-          <div class="row" style="margin-top:10px">
-            <div>
-              <label>Ruta</label>
-              <input id="cfg-ruta" placeholder="17029"/>
-            </div>
-            <div>
-              <label>Días hábiles</label>
-              <input id="cfg-dias" type="number" value="26"/>
-            </div>
-          </div>
-          <div class="row" style="margin-top:10px">
-            <div>
-              <label>Presupuesto general (Q)</label>
-              <input id="cfg-presupuesto" type="number" inputmode="decimal" placeholder="0.00"/>
-            </div>
-            <div>
-              <label>Ventas sin congelador (Q)</label>
-              <input id="cfg-vsc" type="number" value="400" inputmode="decimal"/>
-            </div>
-          </div>
-          <div class="toolbar">
-            <button class="btn primary" id="btn-guardar">GUARDAR</button>
-            <button class="btn danger" id="btn-reset">REINICIAR</button>
-            <button class="btn btn-theme" id="btn-themes" style="margin-left:auto" aria-label="Temas de la app">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 19l3.5-0.5L18 9l-3-3L5.5 15.5 5 19z"/>
-                <path d="M14 6l3 3"/>
-              </svg>
-              <span>Temas</span>
-            </button>
-          </div>
-        </div>
-      </section>
+      <section id="ventas"><div class="card"><div class="card-head"><h3>Registrar venta</h3></div><div class="row"><div><label>Tipo de cliente</label><select id="venta-tipo" class="ios-select"><option value="congelador">Con congelador</option><option value="sin">Sin congelador</option></select></div><div><label>Cliente</label><select id="venta-cliente" class="ios-select"></select></div></div><div class="row mt-8"><div><label>Monto (Q)</label><input id="venta-monto" type="number" placeholder="0.00"></div></div><div class="toolbar ventas-toolbar"><button class="btn primary" id="add-venta">Agregar venta</button></div></div><div class="card"><div class="card-head"><h3>Historial de ventas</h3></div><table id="tabla-ventas"><thead><tr><th>Fecha</th><th>Tipo</th><th>Cliente</th><th>Monto</th><th>Acciones</th></tr></thead><tbody></tbody></table></div></section>
+      <section id="clientes"><div class="card"><div class="card-head"><h3>Crear cliente</h3></div><div class="row"><div><label>Nombre del negocio</label><input id="cliente-nombre" placeholder="Ej. Tienda Emanuel"></div><div><label>Tipo</label><select id="cliente-tipo" class="ios-select"><option value="congelador">Con congelador</option><option value="sin">Sin congelador</option></select></div></div><div class="toolbar"><button class="btn primary" id="btn-add-cliente">Agregar cliente</button></div><div class="collapsible"><button class="btn" id="toggle-db">Mostrar/Ocultar base de datos</button><div id="db-list" class="hidden mt-8"></div></div></div></section>
+      <section id="nc"><div class="nc-wrap"><div class="card"><div class="nc-sub">Canal</div><button id="btnOpenCanal" class="nc-btn" type="button"><span id="canalActualLabel">Canal Detalle · 50%</span><span class="muted" style="font-size:18px">▾</span></button></div><div class="card"><input id="search" type="text" placeholder="Buscar producto…"><div id="list" class="nc-list"></div></div><div class="card"><div class="row"><div class="nc-title" style="font-size:14px">Resumen</div><button id="btnClear" type="button" class="btn">Limpiar</button></div><div id="cart" class="nc-wrap mt-8"></div><div class="nc-kpi"><div class="nc-k"><div class="label">Subtotal</div><div id="subtotal" class="value">Q0.00</div></div><div class="nc-k"><div class="label">Motivo</div><div id="motivoLabel" class="value">Falta de energía eléctrica (50%)</div></div><div class="nc-k full"><div class="label">Monto real a aplicar</div><div id="aplicar" class="value" style="font-size:20px">Q0.00</div><div class="nc-note">Nota: se aplica el <span id="motivoPct">50</span>% sobre el subtotal.</div></div></div></div></div></section>
+      <section id="config"><div class="card"><div class="card-head"><h3>Periodo y parámetros</h3></div><div class="row"><div><label>Mes / Año</label><div class="row row-tight"><select id="cfg-mes" class="ios-select"></select><select id="cfg-anio" class="ios-select"></select></div></div></div><div class="row mt-10"><div><label>Ruta</label><input id="cfg-ruta" value="17029"></div><div><label>Días hábiles</label><input id="cfg-dias" type="number" value="26"></div></div><div class="row mt-10"><div><label>Presupuesto general (Q)</label><input id="cfg-presupuesto" type="number" value="8500"></div><div><label>Ventas sin congelador (Q)</label><input id="cfg-vsc" type="number" value="400"></div></div><div class="toolbar"><button class="btn primary" id="btn-guardar">GUARDAR</button><button class="btn danger" id="btn-reset">REINICIAR</button></div></div></section>
     </main>
   </div>
 
-  <div class="modal" id="modal-edit">
-    <div class="modal-card">
-      <h3>Editar venta</h3>
-      <div class="row" style="margin-top:8px">
-        <div>
-          <label>Monto (Q)</label>
-          <input id="edit-monto" type="number" inputmode="decimal" />
-        </div>
-        <div>
-          <label>Fecha</label>
-          <input id="edit-fecha" type="date" />
-        </div>
-      </div>
-      <div class="toolbar">
-        <button class="btn" id="edit-cancel">Cancelar</button>
-        <button class="btn primary" id="edit-save">Guardar cambios</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal" id="modal-themes">
-    <div class="modal-card">
-      <h3>Temas de la app</h3>
-      <p style="font-size:13px;color:var(--muted);margin-top:4px;margin-bottom:10px">Elige el estilo visual que prefieras. Se aplicará en todas las ventanas.</p>
-      <div class="theme-grid">
-        <button class="theme-option" data-theme="original" type="button">
-          <span class="theme-title">Minimal Claro</span>
-          <span class="theme-sub">Tema original</span>
-          <div class="theme-dots">
-            <span class="theme-dot" style="background:#F2F2F7"></span>
-            <span class="theme-dot" style="background:#FFFFFF"></span>
-            <span class="theme-dot" style="background:#2C6E7F"></span>
-          </div>
-        </button>
-        <button class="theme-option" data-theme="rosa" type="button">
-          <span class="theme-title">Rosa Porcelana</span>
-          <span class="theme-sub">Femenino suave</span>
-          <div class="theme-dots">
-            <span class="theme-dot" style="background:#FDF7FB"></span>
-            <span class="theme-dot" style="background:#FFFFFF"></span>
-            <span class="theme-dot" style="background:#E8A6C9"></span>
-          </div>
-        </button>
-        <button class="theme-option" data-theme="lavanda" type="button">
-          <span class="theme-title">Lavanda Pro</span>
-          <span class="theme-sub">Suave y premium</span>
-          <div class="theme-dots">
-            <span class="theme-dot" style="background:#F7F4FF"></span>
-            <span class="theme-dot" style="background:#FFFFFF"></span>
-            <span class="theme-dot" style="background:#A78BFA"></span>
-          </div>
-        </button>
-        <button class="theme-option" data-theme="azul" type="button">
-          <span class="theme-title">Azul Ejecutivo</span>
-          <span class="theme-sub">Corporativo</span>
-          <div class="theme-dots">
-            <span class="theme-dot" style="background:#EEF3F8"></span>
-            <span class="theme-dot" style="background:#FFFFFF"></span>
-            <span class="theme-dot" style="background:#3B82F6"></span>
-          </div>
-        </button>
-        <button class="theme-option" data-theme="verde" type="button">
-          <span class="theme-title">Verde Sage</span>
-          <span class="theme-sub">Calm & focus</span>
-          <div class="theme-dots">
-            <span class="theme-dot" style="background:#F5F8F6"></span>
-            <span class="theme-dot" style="background:#FFFFFF"></span>
-            <span class="theme-dot" style="background:#6AA785"></span>
-          </div>
-        </button>
-      </div>
-      <div class="toolbar" style="margin-top:12px;justify-content:flex-end">
-        <button class="btn" id="themes-close">Cerrar</button>
-      </div>
-    </div>
-  </div>
+  <div class="modal" id="modal-edit"><div class="modal-card"><h3>Editar venta</h3><div class="row mt-8"><div><label>Monto (Q)</label><input id="edit-monto" type="number"></div><div><label>Fecha</label><input id="edit-fecha" type="date"></div></div><div class="toolbar"><button class="btn" id="edit-cancel">Cancelar</button><button class="btn primary" id="edit-save">Guardar cambios</button></div></div></div>
+  <div id="canalModal" class="nc-sheet-modal hidden"><div class="nc-sheet"><div class="nc-handle"></div><div class="row" style="margin-bottom:10px"><div><div class="nc-title" style="font-size:18px">Canal y motivo</div><div class="nc-sub">Selecciona ambos dentro de esta misma ventana.</div></div><button id="btnCloseCanal" type="button" class="btn">Cerrar</button></div><div class="nc-stack"><div class="nc-sub">Canal</div><button class="canal-option btn" data-canal="Canal Detalle" type="button">Canal Detalle</button><button class="canal-option btn" data-canal="Super 24" type="button">Super 24</button><button class="canal-option btn" data-canal="Cruz Verde" type="button">Cruz Verde</button></div><div class="nc-divider"></div><div class="nc-stack"><div class="nc-sub">Motivo del cambio</div><button class="motivo-option btn" data-motivo="50" type="button">Falta de energía eléctrica (50%)</button><button class="motivo-option btn" data-motivo="100" type="button">Falla del congelador (100%)</button></div></div></div></div></div>
 
   <script>
-    // Registrar Service Worker (opcional, no rompe la app si falla)
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
     }
 
-    const $ = s => document.querySelector(s), $$ = s => Array.from(document.querySelectorAll(s));
+
+    const $ = s => document.querySelector(s);
+    const $$ = s => [...document.querySelectorAll(s)];
+    const Q = n => new Intl.NumberFormat('es-GT', { style:'currency', currency:'GTQ', minimumFractionDigits:2 }).format(n || 0);
     const todayStr = () => new Date().toISOString().slice(0, 10);
-    const Q = n => new Intl.NumberFormat('es-GT', { style: 'currency', currency: 'GTQ', minimumFractionDigits: 2 }).format(n || 0);
+    const uid = () => crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now();
+    const save = (k,v) => localStorage.setItem(k, JSON.stringify(v));
+    const load = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
+    const sum = arr => arr.reduce((a,b) => a + (+b.monto || 0), 0);
+    const esc = s => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
     const KEY_CFG = 's360_cfg', KEY_CLIENTS = 's360_clients', KEY_SALES = 's360_sales';
-    const KEY_THEME = 's360_theme';
+    const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    const emptyRoute = () => ({ congelador: [], sin: [] });
+    const DEFAULT_DB = {17029:{congelador:['Caseta Azul (Ixcanal)','Super 24 Minerva'],sin:['Variedades Génesis','Comedor Mary','Tienda Yanira']}};
 
-    const THEMES = {
-      original: { bg:'#F2F2F7', surface:'#FFFFFF', text:'#0A0A0A', brand:'#2C6E7F' },
-      rosa:     { bg:'#FDF7FB', surface:'#FFFFFF', text:'#3D2E40', brand:'#E8A6C9' },
-      lavanda:  { bg:'#F7F4FF', surface:'#FFFFFF', text:'#2A2448', brand:'#A78BFA' },
-      azul:     { bg:'#EEF3F8', surface:'#FFFFFF', text:'#0A1A2A', brand:'#3B82F6' },
-      verde:    { bg:'#F5F8F6', surface:'#FFFFFF', text:'#21322D', brand:'#6AA785' }
-    };
-
-    function applyTheme(name) {
-      const t = THEMES[name] || THEMES.original;
-      const root = document.documentElement;
-      root.style.setProperty('--bg', t.bg);
-      root.style.setProperty('--surface', t.surface);
-      root.style.setProperty('--text', t.text);
-      root.style.setProperty('--brand', t.brand);
-      try { localStorage.setItem(KEY_THEME, name); } catch(e) {}
-    }
-
-    function initThemesUI(currentName) {
-      const options = $$('.theme-option');
-      options.forEach(btn => {
-        const name = btn.dataset.theme;
-        if (!name) return;
-        btn.classList.toggle('active', name === currentName);
-        btn.onclick = () => {
-          applyTheme(name);
-          options.forEach(o => o.classList.toggle('active', o === btn));
-        };
-      });
-    }
-    const uid = () => (self.crypto && crypto.randomUUID ? crypto.randomUUID() : ('id-' + Date.now() + '-' + Math.random().toString(16).slice(2)));
-
-    const DEFAULT_DB = {
-      "17029": {
-        "congelador": [
-          "Caseta Azul (Ixcanal)",
-          "Super 24 Sanarate Centro",
-          "Tienda Norma (Ixcanal)",
-          "Tienda Mónica",
-          "Tienda Helados Flor",
-          "Tienda y Librería Compu Game",
-          "Tienda Marissa 2",
-          "Tienda Magaly",
-          "Tienda Marissa",
-          "Super 24 Minerva",
-          "Super 24 El Rancho",
-          "Librería AMC"
-        ],
-        "sin": [
-          "Variedades Génesis",
-          "Comedor Mary",
-          "Tienda Yanira",
-          "H&S;",
-          "Tienda Escobar",
-          "Tienda San José",
-          "Tienda Sanic"
-        ]
-      },
-      "17030": {
-        "congelador": ["Super 24 Conacaston Sanarate", "super 24 El Rancho 3"],
-        "sin": ["Internet Velasquez", "Tienda Kleidy", "Negocios Estrada", "CR GYM"]
-      },
-      "17031": { "congelador": [], "sin": [] },
-      "17032": { "congelador": [], "sin": [] },
-      "17033": { "congelador": [], "sin": [] },
-      "17034": { "congelador": [], "sin": [] },
-      "17035": { "congelador": [], "sin": [] }
-    };
-
-    function save(k, v) {
-      localStorage.setItem(k, JSON.stringify(v));
-    }
-
-    function load(k) {
-      try {
-        return JSON.parse(localStorage.getItem(k));
-      } catch {
-        return null;
-      }
-    }
-
-    let cfg = load(KEY_CFG) || ((d) => ({
-      mes: d.getMonth() + 1,
-      anio: d.getFullYear(),
-      ruta: '17029',
-      dias: 26,
-      presupuesto: 0,
-      vscMeta: 400,
-      syncUrl: '',
-      token: ''
-    }))(new Date());
-
+    let cfg = load(KEY_CFG) || { mes:new Date().getMonth()+1, anio:new Date().getFullYear(), ruta:'17029', dias:26, presupuesto:8500, vscMeta:400 };
     let db = load(KEY_CLIENTS) || DEFAULT_DB;
     let sales = load(KEY_SALES) || [];
+    let editingId = null;
 
-    const initialTheme = (typeof localStorage !== 'undefined' && localStorage.getItem(KEY_THEME)) || 'original';
-    applyTheme(initialTheme);
+    const routeData = () => db[cfg.ruta] || emptyRoute();
+    const currentSales = () => sales.filter(v => v.ruta===cfg.ruta && v.mes===cfg.mes && v.anio===cfg.anio).sort((a,b) => b.fecha.localeCompare(a.fecha));
 
-    function initTabs() {
-      $$('.tab').forEach(btn => {
-        btn.onclick = () => {
-          $$('.tab').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          const id = btn.dataset.tab;
-          $$('main section').forEach(s => s.classList.remove('active'));
-          const sec = document.getElementById(id);
-          if (sec) sec.classList.add('active');
-          if (id === 'ventas') buildClientSelects();
-          if (id === 'clientes') renderDBList();
-        };
+    function semaforo(pct){
+      return pct >= 100 ? ['ok','Meta alcanzada'] : pct >= 60 ? ['warn','Cerca de la meta'] : ['danger','Aún lejos, impulsa ventas'];
+    }
+
+    function applySemaforo(el, pct){
+      if(!el) return;
+      el.classList.remove('semaforo-ok','semaforo-warn','semaforo-danger');
+      const [nivel] = semaforo(pct);
+      el.classList.add('semaforo-' + nivel);
+    }
+
+    function switchTab(tab){
+      $$('.tab').forEach(b => {
+        const active = b.dataset.tab === tab;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-selected', active ? 'true' : 'false');
       });
-    }
-
-    function initConfigSelectors() {
-      const m = $('#cfg-mes'), a = $('#cfg-anio');
-      const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-      if (m) m.innerHTML = meses.map((n, i) => `<option value="${i + 1}">${n}</option>`).join('');
-      if (a) a.innerHTML = Array.from({ length: 6 }, (_, k) => cfg.anio - 1 + k).map(y => `<option value="${y}">${y}</option>`).join('');
-      if (m) m.value = cfg.mes;
-      if (a) a.value = cfg.anio;
-      if ($('#cfg-ruta')) $('#cfg-ruta').value = cfg.ruta;
-      if ($('#cfg-dias')) $('#cfg-dias').value = cfg.dias;
-      if ($('#cfg-presupuesto')) $('#cfg-presupuesto').value = cfg.presupuesto;
-      if ($('#cfg-vsc')) $('#cfg-vsc').value = cfg.vscMeta;
-
-      if ($('#btn-guardar')) $('#btn-guardar').onclick = () => {
-        cfg.mes = +m.value;
-        cfg.anio = +a.value;
-        cfg.ruta = $('#cfg-ruta').value.trim() || cfg.ruta;
-        cfg.dias = Math.max(1, +$('#cfg-dias').value || 26);
-        cfg.presupuesto = Math.max(0, +$('#cfg-presupuesto').value || 0);
-        const vscEl = $('#cfg-vsc');
-        cfg.vscMeta = vscEl ? Math.max(0, +vscEl.value || 0) : cfg.vscMeta;
-        save(KEY_CFG, cfg);
-        renderAll();
-        alert('Configuración guardada');
-      };
-
-      if ($('#btn-reset')) $('#btn-reset').onclick = () => {
-        if (confirm('Esto borrará todas las ventas del mes actual. ¿Continuar?')) {
-          sales = sales.filter(v => !(v.ruta === cfg.ruta && v.anio === cfg.anio && v.mes === cfg.mes));
-          save(KEY_SALES, sales);
-          renderAll();
-          alert('Mes reiniciado.');
-        }
-      };
-    }
-
-    // Construye el select de clientes según el tipo elegido y el filtro de búsqueda
-    function buildClientSelects() {
-      const route = db[cfg.ruta] || { congelador: [], sin: [] };
-      const tipoEl = $('#venta-tipo');
-      const cliEl = $('#venta-cliente');
-      const searchEl = $('#cliente-buscar');
-      if (!tipoEl || !cliEl) return;
-      const tipo = tipoEl.value || 'congelador';
-      const baseList = tipo === 'congelador' ? route.congelador : route.sin;
-      const filtro = (searchEl?.value || '').toLowerCase();
-      const list = baseList.filter(x => x.toLowerCase().includes(filtro));
-      cliEl.innerHTML = list.map(n => `<option>${n}</option>`).join('');
-    }
-
-    // Listener para búsqueda de cliente
-    document.addEventListener('input', e => {
-      if (e.target && e.target.id === 'cliente-buscar') buildClientSelects();
-    });
-
-    // Cambio de tipo actualiza el listado de clientes
-    if ($('#venta-tipo')) $('#venta-tipo').addEventListener('change', buildClientSelects);
-
-    // Botón único para agregar venta
-    if ($('#add-venta')) $('#add-venta').onclick = () => addVenta(
-      $('#venta-tipo').value,
-      $('#venta-cliente').value,
-      +$('#venta-monto').value || 0
-    );
-
-    async function addVenta(tipo, cliente, monto) {
-      if (!cliente) {
-        alert('Selecciona un cliente.');
-        return;
-      }
-      if (!(monto > 0)) {
-        alert('Ingresa un monto válido.');
-        return;
-      }
-      const v = {
-        id: uid(),
-        fecha: todayStr(),
-        tipo,
-        cliente,
-        monto: +monto,
-        ruta: cfg.ruta,
-        mes: cfg.mes,
-        anio: cfg.anio
-      };
-      sales.push(v);
-      save(KEY_SALES, sales);
-      if ($('#venta-monto')) $('#venta-monto').value = '';
+      $$('main section').forEach(s => s.classList.toggle('active', s.id === tab));
       renderAll();
-      if (cfg.syncUrl) {
-        try {
-          await fetch(cfg.syncUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              id: v.id,
-              fecha: v.fecha,
-              tipo: v.tipo,
-              cliente: v.cliente,
-              monto: v.monto,
-              ruta: v.ruta,
-              mes: v.mes,
-              anio: v.anio,
-              token: cfg.token || ''
-            })
-          });
-        } catch (e) {
-          // fallo silencioso de sync
-        }
-      }
     }
 
-    function renderVentasTable() {
-      const tbody = $('#tabla-ventas tbody');
-      if (!tbody) return;
+    function buildClientSelects(){
+      const list = ($('#venta-tipo').value === 'congelador' ? routeData().congelador : routeData().sin);
+      $('#venta-cliente').innerHTML = list.length ? list.map(n => `<option>${esc(n)}</option>`).join('') : '<option value="">Sin clientes</option>';
+    }
+
+    function renderVentas(){
+      const rows = currentSales().map(v => `<tr><td>${v.fecha}</td><td>${v.tipo==='congelador'?'Con congelador':'Sin congelador'}</td><td>${esc(v.cliente)}</td><td>${Q(v.monto)}</td><td><button class="btn" data-edit="${v.id}">Editar</button> <button class="btn danger" data-del="${v.id}">Borrar</button></td></tr>`).join('');
+      $('#tabla-ventas tbody').innerHTML = rows || '<tr><td colspan="5" class="muted">Aún no hay ventas registradas.</td></tr>';
+      $$('[data-edit]').forEach(b => b.onclick = () => openEdit(b.dataset.edit));
+      $$('[data-del]').forEach(b => b.onclick = () => delVenta(b.dataset.del));
+    }
+
+    function renderDashboard(){
       const list = currentSales();
-      tbody.innerHTML = list.map(v => `
-        <tr>
-          <td>${v.fecha}</td>
-          <td>${v.tipo === 'congelador' ? 'Con congelador' : 'Sin congelador'}</td>
-          <td>${escapeHtml(v.cliente)}</td>
-          <td>${Q(v.monto)}</td>
-          <td>
-            <button class='btn' data-edit='${v.id}'>Editar</button>
-            <button class='btn danger' data-del='${v.id}'>Borrar</button>
-          </td>
-        </tr>`
-      ).join('');
-      tbody.querySelectorAll('button[data-edit]').forEach(b => b.onclick = () => openEdit(b.dataset.edit));
-      tbody.querySelectorAll('button[data-del]').forEach(b => b.onclick = () => delVenta(b.dataset.del));
+      const hoy = Math.max(1, new Date().getDate());
+
+      const total = sum(list);
+      const falta = Math.max(0, cfg.presupuesto - total);
+      const avance = cfg.presupuesto ? total / cfg.presupuesto * 100 : 0;
+      const proyTotal = (total / hoy) * cfg.dias;
+      const [nivelGeneral, msgGeneral] = semaforo(avance);
+
+      $('#dash-ruta').textContent = cfg.ruta;
+      $('#kpi-presupuesto').textContent = Q(cfg.presupuesto);
+      $('#kpi-vendido').textContent = Q(total);
+      $('#kpi-falta').textContent = Q(falta);
+      $('#kpi-global-avance').textContent = avance.toFixed(1) + '%';
+      $('#kpi-global-proy').textContent = Q(proyTotal);
+      $('#coach-msg').innerHTML = `<span class="status-dot status-${nivelGeneral}"></span>${msgGeneral}`;
+      $('#progress-bar').style.width = Math.min(100, avance).toFixed(1) + '%';
+      $('#progress-bar').style.background = avance>=100 ? 'var(--ok)' : avance>=60 ? 'var(--warn)' : 'var(--danger)';
+      applySemaforo($('#card-general'), avance);
+
+      const cong = list.filter(v => v.tipo === 'congelador');
+      const congTotal = sum(cong);
+      const congClientes = new Set(cong.map(v => v.cliente)).size;
+      const congAvance = cfg.presupuesto ? congTotal / cfg.presupuesto * 100 : 0;
+      const congProy = (congTotal / hoy) * cfg.dias;
+
+      $('#kpi-cong-total').textContent = Q(congTotal);
+      $('#kpi-cong-clientes').textContent = congClientes + ' clientes';
+      $('#kpi-cong-meta').textContent = Q(cfg.presupuesto);
+      $('#kpi-cong-avance').textContent = congAvance.toFixed(1) + '%';
+      $('#kpi-cong-proy').textContent = Q(congProy);
+      applySemaforo($('#card-cong'), congAvance);
+
+      const sin = list.filter(v => v.tipo === 'sin');
+      const sinTotal = sum(sin);
+      const sinClientes = new Set(sin.map(v => v.cliente)).size;
+      const sinMeta = cfg.vscMeta || 0;
+      const sinAvance = sinMeta ? sinTotal / sinMeta * 100 : 0;
+      const sinProy = (sinTotal / hoy) * cfg.dias;
+
+      $('#kpi-sin-total').textContent = Q(sinTotal);
+      $('#kpi-sin-clientes').textContent = sinClientes + ' clientes';
+      $('#kpi-sin-meta').textContent = Q(sinMeta);
+      $('#kpi-sin-avance').textContent = sinAvance.toFixed(1) + '%';
+      $('#kpi-sin-proy').textContent = Q(sinProy);
+      applySemaforo($('#card-sin'), sinAvance);
     }
 
-    function openEdit(id) {
+    function renderDb(){
+      const r = routeData();
+      $('#db-list').innerHTML = `<div class="subrow"><span class="muted">Ruta <strong>${esc(cfg.ruta)}</strong></span><span class="pill">${r.congelador.length} con · ${r.sin.length} sin</span></div><div class="db-grid"><div><h3>Listado A</h3><ul class="db-list-ul">${r.congelador.map(c=>`<li>${esc(c)}</li>`).join('') || '<li><em>Vacío</em></li>'}</ul></div><div><h3>Listado B</h3><ul class="db-list-ul">${r.sin.map(c=>`<li>${esc(c)}</li>`).join('') || '<li><em>Vacío</em></li>'}</ul></div></div>`;
+    }
+
+    function addVenta(){
+      const tipo = $('#venta-tipo').value, cliente = $('#venta-cliente').value, monto = +$('#venta-monto').value || 0;
+      if(!cliente) return alert('Selecciona un cliente.');
+      if(!(monto > 0)) return alert('Ingresa un monto válido.');
+      sales.push({id:uid(), fecha:todayStr(), tipo, cliente, monto, ruta:cfg.ruta, mes:cfg.mes, anio:cfg.anio});
+      save(KEY_SALES, sales);
+      $('#venta-monto').value = '';
+      renderAll();
+    }
+
+    function addCliente(){
+      const nombre = $('#cliente-nombre').value.trim(), tipo = $('#cliente-tipo').value;
+      if(!nombre) return alert('Escribe el nombre del negocio');
+      db[cfg.ruta] ??= emptyRoute();
+      db[cfg.ruta][tipo === 'congelador' ? 'congelador' : 'sin'].push(nombre);
+      save(KEY_CLIENTS, db);
+      $('#cliente-nombre').value = '';
+      renderAll();
+    }
+
+    function openEdit(id){
       const v = sales.find(x => x.id === id);
-      if (!v) return;
-      const m = document.getElementById('modal-edit');
-      m.classList.add('active');
-      document.getElementById('edit-monto').value = v.monto;
-      document.getElementById('edit-fecha').value = v.fecha;
-      document.getElementById('edit-save').onclick = () => {
-        const nuevo = +document.getElementById('edit-monto').value || 0;
-        if (!(nuevo > 0)) return alert('Monto inválido');
-        const f = document.getElementById('edit-fecha').value || todayStr();
-        v.monto = nuevo;
-        v.fecha = f;
-        save(KEY_SALES, sales);
-        m.classList.remove('active');
-        renderAll();
-      };
-      document.getElementById('edit-cancel').onclick = () => m.classList.remove('active');
+      if(!v) return;
+      editingId = id;
+      $('#edit-monto').value = v.monto;
+      $('#edit-fecha').value = v.fecha;
+      $('#modal-edit').classList.add('active');
     }
 
-    function delVenta(id) {
-      if (!confirm('¿Eliminar esta venta?')) return;
+    function saveEdit(){
+      const v = sales.find(x => x.id === editingId), nuevo = +$('#edit-monto').value || 0;
+      if(!v || !(nuevo > 0)) return alert('Monto inválido');
+      v.monto = nuevo;
+      v.fecha = $('#edit-fecha').value || todayStr();
+      save(KEY_SALES, sales);
+      $('#modal-edit').classList.remove('active');
+      renderAll();
+    }
+
+    function delVenta(id){
+      if(!confirm('¿Eliminar esta venta?')) return;
       sales = sales.filter(v => v.id !== id);
       save(KEY_SALES, sales);
       renderAll();
     }
 
-    function currentSales() {
-      return sales
-        .filter(v => v.ruta === cfg.ruta && v.mes === cfg.mes && v.anio === cfg.anio)
-        .sort((a, b) => b.fecha.localeCompare(a.fecha));
+    const PRODUCTOS = [
+  {name:'Fresa', detalle:4.50, super24:4.19, cruzVerde:0},
+  {name:'Guanaba', detalle:4.50, super24:4.19, cruzVerde:0},
+  {name:'Mora', detalle:4.50, super24:4.19, cruzVerde:0},
+  {name:'Jocote', detalle:4.50, super24:4.19, cruzVerde:0},
+  {name:'Mango Verde Pepitoria', detalle:4.50, super24:4.19, cruzVerde:0},
+  {name:'Limon Dieta', detalle:6.30, super24:0, cruzVerde:0},
+  {name:'Mandarina Dieta', detalle:6.30, super24:0, cruzVerde:0},
+  {name:'Fresa Dieta', detalle:6.30, super24:0, cruzVerde:0},
+  {name:'Mango Dieta', detalle:6.30, super24:0, cruzVerde:0},
+  {name:'Yogurt de Fresa', detalle:6.30, super24:0, cruzVerde:0},
+  {name:'Yogurt de Melocoton', detalle:6.30, super24:0, cruzVerde:0},
+  {name:'Vainilla', detalle:4.50, super24:0, cruzVerde:0},
+  {name:'Chocolate', detalle:4.50, super24:0, cruzVerde:0},
+  {name:'Limon', detalle:4.50, super24:4.50, cruzVerde:0},
+  {name:'Mandarina', detalle:4.50, super24:0, cruzVerde:0},
+  {name:'Mango', detalle:4.50, super24:4.50, cruzVerde:0},
+  {name:'Naranja con Pepitoria', detalle:4.50, super24:0, cruzVerde:0},
+  {name:'Piña con Pepitoria', detalle:4.50, super24:0, cruzVerde:0},
+  {name:'Tamarindo con Tajin', detalle:4.50, super24:0, cruzVerde:0},
+  {name:'Nance', detalle:4.50, super24:0, cruzVerde:0},
+  {name:'Paleta de Nutela', detalle:7.50, super24:0, cruzVerde:0},
+  {name:'Paleta Morena', detalle:5.25, super24:0, cruzVerde:0},
+  {name:'Paleta Chocolate Crispy', detalle:4.50, super24:4.19, cruzVerde:0},
+  {name:'Paleta Chocolate Cream', detalle:3.75, super24:0, cruzVerde:0},
+  {name:'Paleta de Mantequilla de Mani', detalle:7.50, super24:0, cruzVerde:0},
+  {name:'Chocobanano Con Mani P', detalle:5.25, super24:4.87, cruzVerde:0},
+  {name:'Chocobanano Sin Mani P', detalle:4.50, super24:4.50, cruzVerde:0},
+  {name:'Cholapiz', detalle:1.87, super24:0, cruzVerde:0},
+  {name:'Arcoiris', detalle:2.25, super24:2.09, cruzVerde:0},
+  {name:'Twist Arcoiris', detalle:3.75, super24:3.48, cruzVerde:0},
+  {name:'Mixta Piñata', detalle:0.75, super24:0, cruzVerde:0},
+  {name:'Cremosa Mandarina', detalle:3.00, super24:2.79, cruzVerde:0},
+  {name:'Cremosa Uva', detalle:3.00, super24:0, cruzVerde:0},
+  {name:'Cremosa Granadina', detalle:3.00, super24:2.79, cruzVerde:0},
+  {name:'Cremosa Frambuesa', detalle:3.00, super24:2.78, cruzVerde:0},
+  {name:'Cremosa Arandano', detalle:3.00, super24:2.78, cruzVerde:0},
+  {name:'Twist Sipi Manzana Limon', detalle:3.75, super24:3.48, cruzVerde:0},
+  {name:'Twist Sipi Punch Uva', detalle:3.75, super24:3.48, cruzVerde:0},
+  {name:'Morena Cookies And Cream', detalle:6.00, super24:0, cruzVerde:0},
+  {name:'Morena Con Cajeta', detalle:6.00, super24:0, cruzVerde:0},
+  {name:'Paleta Coco', detalle:0, super24:4.19, cruzVerde:0},
+  {name:'Chocobanano Mixto', detalle:0, super24:26.00, cruzVerde:0},
+  {name:'Chocobanano Con Mani G', detalle:0, super24:8.40, cruzVerde:0},
+  {name:'Paleta Vainilla', detalle:0, super24:4.50, cruzVerde:0},
+  {name:'Caja Chapina', detalle:0, super24:22.97, cruzVerde:0},
+  {name:'Helado Paleta Arcoiris', detalle:0, super24:2.09, cruzVerde:0},
+  {name:'Helado Paleta Chocolate Crispy', detalle:0, super24:4.19, cruzVerde:0}
+];
+    const MOTIVOS = {'50':{label:'Falta de energía eléctrica (50%)',factor:.5},'100':{label:'Falla del congelador (100%)',factor:1}};
+    let canal = 'Canal Detalle', motivoKey = '50', cart = [], query = '';
+    const getPrice = name => {
+      const p = PRODUCTOS.find(i => i.name === name);
+      if(!p) return 0;
+      if(canal === 'Canal Detalle') return p.detalle ?? 0;
+      if(canal === 'Super 24') return p.super24 ?? 0;
+      if(canal === 'Cruz Verde') return p.cruzVerde ?? 0;
+      return 0;
+    };
+
+    function renderNc(){
+      const list = (query ? PRODUCTOS.filter(i => i.name.toLowerCase().includes(query.toLowerCase())) : PRODUCTOS);
+      $('#list').innerHTML = list.map(i => { const q = (cart.find(x => x.name === i.name) || {}).qty || 0; return `<div class="nc-item"><div class="nc-left"><div class="row" style="gap:6px;align-items:center"><div class="nc-truncate">${esc(i.name)}</div>${q ? `<span class="nc-chip">x${q}</span>` : ''}</div><div class="muted">${Q(getPrice(i.name))} · ${canal}</div></div><div class="nc-actions"><button data-add="${esc(i.name)}">Agregar</button></div></div>`; }).join('') || '<div class="muted">No hay resultados…</div>';
+      $('#cart').innerHTML = cart.length ? cart.map(i => `<div class="row nc-cart-row"><div class="nc-left"><div class="nc-truncate">${esc(i.name)}</div><div class="muted">${i.qty} × ${Q(getPrice(i.name))} = <b>${Q(i.qty * getPrice(i.name))}</b></div></div><div class="nc-mini-row"><button data-dec="${esc(i.name)}">-</button><button data-inc="${esc(i.name)}">+</button><button class="nc-danger" data-remove="${esc(i.name)}">Quitar</button></div></div>`).join('') : '<div class="muted">Aún no hay productos seleccionados.</div>';
+      const subtotal = cart.reduce((a,i) => a + i.qty * getPrice(i.name), 0), mot = MOTIVOS[motivoKey];
+      $('#subtotal').textContent = Q(subtotal);
+      $('#motivoLabel').textContent = mot.label;
+      $('#aplicar').textContent = Q(subtotal * mot.factor);
+      $('#motivoPct').textContent = Math.round(mot.factor * 100);
+      $('#canalActualLabel').textContent = `${canal} · ${Math.round(mot.factor * 100)}%`;
+      $$('.canal-option').forEach(b => b.classList.toggle('nc-apply', b.dataset.canal === canal));
+      $$('.motivo-option').forEach(b => b.classList.toggle('nc-apply', b.dataset.motivo === motivoKey));
     }
 
-    if (document.getElementById('btn-add-cliente')) {
-      document.getElementById('btn-add-cliente').onclick = () => {
-        const nombre = document.getElementById('cliente-nombre').value.trim();
-        const tipo = document.getElementById('cliente-tipo').value;
-        if (!nombre) return alert('Escribe el nombre del negocio');
-        if (!db[cfg.ruta]) db[cfg.ruta] = { congelador: [], sin: [] };
-        const arr = tipo === 'congelador' ? db[cfg.ruta].congelador : db[cfg.ruta].sin;
-        arr.push(nombre);
-        save(KEY_CLIENTS, db);
-        document.getElementById('cliente-nombre').value = '';
-        buildClientSelects();
-        renderDBList();
-        alert('Cliente agregado a la ruta ' + cfg.ruta);
-      };
-    }
-
-    if (document.getElementById('toggle-db')) {
-      document.getElementById('toggle-db').onclick = () => {
-        const el = document.getElementById('db-list');
-        el.style.display = el.style.display === 'none' ? 'block' : 'none';
-        if (el.style.display === 'block') renderDBList();
-      };
-    }
-
-    function renderDBList() {
-      const wrap = document.getElementById('db-list');
-      if (!wrap) return;
-      const route = db[cfg.ruta] || { congelador: [], sin: [] };
-      wrap.innerHTML = `
-        <div class='subrow'>
-          <span class='muted'>Ruta <strong>${escapeHtml(cfg.ruta)}</strong></span>
-          <span class='pill'>${route.congelador.length} con · ${route.sin.length} sin</span>
-        </div>
-        <div style='display:grid;gap:8px;margin-top:8px'>
-          <div>
-            <h3>Listado A (congelador)</h3>
-            <ul style='margin:6px 0 0 16px'>
-              ${route.congelador.map(c => `<li>${escapeHtml(c)}</li>`).join('') || '<li><em>Vacío</em></li>'}
-            </ul>
-          </div>
-          <div>
-            <h3>Listado B (sin congelador)</h3>
-            <ul style='margin:6px 0 0 16px'>
-              ${route.sin.map(c => `<li>${escapeHtml(c)}</li>`).join('') || '<li><em>Vacío</em></li>'}
-            </ul>
-          </div>
-        </div>`;
-    }
-
-    function renderDashboard() {
-      const list = currentSales();
-      const total = sum(list);
-      const vcc = sum(list.filter(v => v.tipo === 'congelador'));
-      const vsc = sum(list.filter(v => v.tipo === 'sin'));
-      const clVcc = new Set(list.filter(v => v.tipo === 'congelador').map(v => v.cliente)).size;
-      const clVsc = new Set(list.filter(v => v.tipo === 'sin').map(v => v.cliente)).size;
-
-      setText('#kpi-presupuesto', Q(cfg.presupuesto));
-      setText('#dash-ruta', cfg.ruta);
-      setText('#kpi-vendido', Q(total));
-      const falta = Math.max(0, cfg.presupuesto - total);
-      setText('#kpi-falta', Q(falta));
-
-      const avance = cfg.presupuesto > 0 ? (total / cfg.presupuesto * 100) : 0;
-      const pb = document.getElementById('progress-bar');
-      if (pb) {
-        pb.style.width = Math.min(100, avance).toFixed(1) + '%';
-        pb.style.background = avance >= 100 ? 'var(--ok)' : (avance >= 60 ? 'var(--warn)' : 'var(--danger)');
-      }
-
-      setText('#kpi-global-avance', `${avance.toFixed(1)}%`);
-      const hoy = new Date();
-      const diasTrans = Math.max(1, Math.min(cfg.dias, hoy.getDate()));
-      const promDia = total / diasTrans;
-      const proy = Math.round(promDia * cfg.dias * 100) / 100;
-      setText('#kpi-global-proy', Q(proy));
-      setText('#coach-msg', avance >= 100 ? '¡Meta cumplida! Buen trabajo' : (avance >= 60 ? '¡Casi! Mantén el ritmo' : 'Aún lejos, impulsa ventas'));
-
-      setText('#kpi-vcc', Q(vcc));
-      setText('#kpi-vcc-clientes', clVcc);
-      const avVcc = cfg.presupuesto ? (vcc / cfg.presupuesto * 100) : 0;
-      setText('#kpi-vcc-avance', `${avVcc.toFixed(1)}%`);
-      setText('#kpi-vcc-presupuesto-label', Q(cfg.presupuesto));
-      setText('#kpi-vcc-proy', Q(Math.round((vcc / diasTrans * cfg.dias) * 100) / 100));
-
-      setText('#kpi-vsc', Q(vsc));
-      setText('#kpi-vsc-clientes', clVsc);
-      const avVsc = cfg.vscMeta > 0 ? (vsc / cfg.vscMeta * 100) : 0;
-      setText('#kpi-vsc-avance', `${avVsc.toFixed(1)}%`);
-      setText('#kpi-vsc-meta-label', Q(cfg.vscMeta));
-      setText('#kpi-vsc-proy', Q(Math.round((vsc / diasTrans * cfg.dias) * 100) / 100));
-    }
-
-    function setText(sel, val) {
-      const el = document.querySelector(sel);
-      if (el) el.textContent = val;
-    }
-
-    function sum(arr) {
-      return arr.reduce((a, b) => a + (+b.monto || 0), 0);
-    }
-
-    function escapeHtml(s) {
-      return (s + '').replace(/[&<>"']/g, m => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '"': '&quot;',
-        "'": '&#39;',
-        '>': '&gt;'
-      }[m] || m));
-    }
-
-    function renderAll() {
+    function renderAll(){
       buildClientSelects();
-      renderVentasTable();
+      renderVentas();
       renderDashboard();
+      renderNc();
+      if(!$('#db-list').classList.contains('hidden')) renderDb();
     }
 
-    // Inicializar todo
-    initTabs();
-    initConfigSelectors();
-
-    if ($('#btn-themes')) {
-      $('#btn-themes').onclick = () => {
-        const m = document.getElementById('modal-themes');
-        if (m) m.classList.add('active');
+    $$('.tab').forEach(b => b.onclick = e => { e.preventDefault(); switchTab(b.dataset.tab); });
+    $('#venta-tipo').onchange = buildClientSelects;
+    $('#add-venta').onclick = addVenta;
+    $('#btn-add-cliente').onclick = addCliente;
+    $('#edit-save').onclick = saveEdit;
+    $('#edit-cancel').onclick = () => $('#modal-edit').classList.remove('active');
+    $('#modal-edit').onclick = e => { if(e.target.id === 'modal-edit') $('#modal-edit').classList.remove('active'); };
+    $('#toggle-db').onclick = () => { $('#db-list').classList.toggle('hidden'); if(!$('#db-list').classList.contains('hidden')) renderDb(); };
+    $('#cfg-mes').innerHTML = meses.map((n,i) => `<option value="${i+1}">${n}</option>`).join('');
+    $('#cfg-anio').innerHTML = Array.from({length:6},(_,k) => cfg.anio - 1 + k).map(y => `<option value="${y}">${y}</option>`).join('');
+    $('#cfg-mes').value = cfg.mes; $('#cfg-anio').value = cfg.anio;
+    $('#cfg-ruta').value = cfg.ruta;
+    $('#cfg-dias').value = cfg.dias;
+    $('#cfg-presupuesto').value = cfg.presupuesto;
+    $('#cfg-vsc').value = cfg.vscMeta;
+    $('#btn-guardar').onclick = () => {
+      cfg = {
+        ...cfg,
+        mes:+$('#cfg-mes').value,
+        anio:+$('#cfg-anio').value,
+        ruta:$('#cfg-ruta').value.trim() || cfg.ruta,
+        dias:Math.max(1,+$('#cfg-dias').value || 26),
+        presupuesto:Math.max(0,+$('#cfg-presupuesto').value || 0),
+        vscMeta:Math.max(0,+$('#cfg-vsc').value || 0)
       };
-    }
-    if (document.getElementById('themes-close')) {
-      document.getElementById('themes-close').onclick = () => {
-        const m = document.getElementById('modal-themes');
-        if (m) m.classList.remove('active');
-      };
-    }
-
-    initThemesUI(initialTheme);
+      save(KEY_CFG, cfg);
+      $('#cfg-ruta').value = cfg.ruta;
+      $('#cfg-dias').value = cfg.dias;
+      $('#cfg-presupuesto').value = cfg.presupuesto;
+      $('#cfg-vsc').value = cfg.vscMeta;
+      renderAll();
+      alert('Configuración guardada');
+    };
+    $('#btn-reset').onclick = () => { if(!confirm('Esto borrará todas las ventas del mes actual. ¿Continuar?')) return; sales = sales.filter(v => !(v.ruta===cfg.ruta && v.anio===cfg.anio && v.mes===cfg.mes)); save(KEY_SALES, sales); renderAll(); };
+    $('#search').oninput = e => { query = e.target.value; renderNc(); };
+    $('#btnClear').onclick = () => { cart = []; renderNc(); };
+    $('#btnOpenCanal').onclick = () => $('#canalModal').classList.remove('hidden');
+    $('#btnCloseCanal').onclick = () => $('#canalModal').classList.add('hidden');
+    $('#canalModal').onclick = e => { if(e.target.id === 'canalModal') $('#canalModal').classList.add('hidden'); };
+    $$('.canal-option').forEach(b => b.onclick = () => { canal = b.dataset.canal; renderNc(); });
+    $$('.motivo-option').forEach(b => b.onclick = () => { motivoKey = b.dataset.motivo; renderNc(); $('#canalModal').classList.add('hidden'); });
+    $('#list').onclick = e => { const b = e.target.closest('[data-add]'); if(!b) return; const name = b.dataset.add; const f = cart.find(i => i.name === name); if(f) f.qty++; else cart.push({name, qty:1}); renderNc(); };
+    $('#cart').onclick = e => { const d = e.target.closest('[data-dec]'), i = e.target.closest('[data-inc]'), r = e.target.closest('[data-remove]'); const name = d?.dataset.dec || i?.dataset.inc || r?.dataset.remove; if(!name) return; const f = cart.find(x => x.name === name); if(d && f) f.qty--; if(i && f) f.qty++; if(r) cart = cart.filter(x => x.name !== name); cart = cart.filter(x => x.qty > 0); renderNc(); };
     renderAll();
   </script>
 </body>
