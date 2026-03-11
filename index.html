@@ -154,21 +154,27 @@
         </div>
       </section>
 
-      <section id="ventas"><div class="card"><div class="card-head"><h3>Registrar venta</h3></div><div class="row"><div><label>Tipo de cliente</label><select id="venta-tipo" class="ios-select"><option value="congelador">Con congelador</option><option value="sin">Sin congelador</option></select></div><div><label>Cliente</label><select id="venta-cliente" class="ios-select"></select></div></div><div class="row mt-8"><div><label>Monto (Q)</label><input id="venta-monto" type="number" placeholder="0.00"></div></div><div class="toolbar ventas-toolbar"><button class="btn primary" id="add-venta">Agregar venta</button></div></div><div class="card"><div class="card-head"><h3>Historial de ventas</h3></div><table id="tabla-ventas"><thead><tr><th>Fecha</th><th>Tipo</th><th>Cliente</th><th>Monto</th><th>Acciones</th></tr></thead><tbody></tbody></table></div></section>
+      <section id="ventas"><div class="card"><div class="card-head"><h3>Registrar venta</h3></div><div class="row"><div><label>Tipo de cliente</label><select id="venta-tipo" class="ios-select"><option value="congelador">Con congelador</option><option value="sin">Sin congelador</option></select></div><div><label>Cliente</label><select id="venta-cliente" class="ios-select"></select></div></div><div class="row mt-8"><div><label>Monto (Q)</label><input id="venta-monto" type="number" step="0.01" placeholder="0.00"></div></div><div class="toolbar ventas-toolbar"><button class="btn primary" id="add-venta">Agregar venta</button></div></div><div class="card"><div class="card-head"><h3>Historial de ventas</h3></div><table id="tabla-ventas"><thead><tr><th>Fecha</th><th>Tipo</th><th>Cliente</th><th>Monto</th><th>Acciones</th></tr></thead><tbody></tbody></table></div></section>
       <section id="clientes"><div class="card"><div class="card-head"><h3>Crear cliente</h3></div><div class="row"><div><label>Nombre del negocio</label><input id="cliente-nombre" placeholder="Ej. Tienda Emanuel"></div><div><label>Tipo</label><select id="cliente-tipo" class="ios-select"><option value="congelador">Con congelador</option><option value="sin">Sin congelador</option></select></div></div><div class="toolbar"><button class="btn primary" id="btn-add-cliente">Agregar cliente</button></div><div class="collapsible"><button class="btn" id="toggle-db">Mostrar/Ocultar base de datos</button><div id="db-list" class="hidden mt-8"></div></div></div></section>
       <section id="nc"><div class="nc-wrap"><div class="card"><div class="nc-sub">Canal</div><button id="btnOpenCanal" class="nc-btn" type="button"><span id="canalActualLabel">Canal Detalle · 50%</span><span class="muted" style="font-size:18px">▾</span></button></div><div class="card"><input id="search" type="text" placeholder="Buscar producto…"><div id="list" class="nc-list"></div></div><div class="card"><div class="row"><div class="nc-title" style="font-size:14px">Resumen</div><button id="btnClear" type="button" class="btn">Limpiar</button></div><div id="cart" class="nc-wrap mt-8"></div><div class="nc-kpi"><div class="nc-k"><div class="label">Subtotal</div><div id="subtotal" class="value">Q0.00</div></div><div class="nc-k"><div class="label">Motivo</div><div id="motivoLabel" class="value">Falta de energía eléctrica (50%)</div></div><div class="nc-k full"><div class="label">Monto real a aplicar</div><div id="aplicar" class="value" style="font-size:20px">Q0.00</div><div class="nc-note">Nota: se aplica el <span id="motivoPct">50</span>% sobre el subtotal.</div></div></div></div></div></section>
-      <section id="config"><div class="card"><div class="card-head"><h3>Periodo y parámetros</h3></div><div class="row"><div><label>Mes / Año</label><div class="row row-tight"><select id="cfg-mes" class="ios-select"></select><select id="cfg-anio" class="ios-select"></select></div></div></div><div class="row mt-10"><div><label>Ruta</label><input id="cfg-ruta" value="17029"></div><div><label>Días hábiles</label><input id="cfg-dias" type="number" value="26"></div></div><div class="row mt-10"><div><label>Presupuesto general (Q)</label><input id="cfg-presupuesto" type="number" value="8500"></div><div><label>Ventas sin congelador (Q)</label><input id="cfg-vsc" type="number" value="400"></div></div><div class="toolbar"><button class="btn primary" id="btn-guardar">GUARDAR</button><button class="btn danger" id="btn-reset">REINICIAR</button></div></div></section>
+      <section id="config"><div class="card"><div class="card-head"><h3>Periodo y parámetros</h3></div><div class="row"><div><label>Mes / Año</label><div class="row row-tight"><select id="cfg-mes" class="ios-select"></select><select id="cfg-anio" class="ios-select"></select></div></div></div><div class="row mt-10"><div><label>Ruta</label><input id="cfg-ruta" value="17029"></div><div><label>Días hábiles</label><input id="cfg-dias" type="number" value="26"></div></div><div class="row mt-10"><div><label>Presupuesto general (Q)</label><input id="cfg-presupuesto" type="number" step="0.01" value="8500"></div><div><label>Ventas sin congelador (Q)</label><input id="cfg-vsc" type="number" step="0.01" value="400"></div></div><div class="toolbar"><button class="btn primary" id="btn-guardar">GUARDAR</button><button class="btn danger" id="btn-reset">REINICIAR</button></div></div></section>
     </main>
   </div>
 
-  <div class="modal" id="modal-edit"><div class="modal-card"><h3>Editar venta</h3><div class="row mt-8"><div><label>Monto (Q)</label><input id="edit-monto" type="number"></div><div><label>Fecha</label><input id="edit-fecha" type="date"></div></div><div class="toolbar"><button class="btn" id="edit-cancel">Cancelar</button><button class="btn primary" id="edit-save">Guardar cambios</button></div></div></div>
+  <div class="modal" id="modal-edit"><div class="modal-card"><h3>Editar venta</h3><div class="row mt-8"><div><label>Monto (Q)</label><input id="edit-monto" type="number" step="0.01"></div><div><label>Fecha</label><input id="edit-fecha" type="date"></div></div><div class="toolbar"><button class="btn" id="edit-cancel">Cancelar</button><button class="btn primary" id="edit-save">Guardar cambios</button></div></div></div>
   <div id="canalModal" class="nc-sheet-modal hidden"><div class="nc-sheet"><div class="nc-handle"></div><div class="row" style="margin-bottom:10px"><div><div class="nc-title" style="font-size:18px">Canal y motivo</div><div class="nc-sub">Selecciona ambos dentro de esta misma ventana.</div></div><button id="btnCloseCanal" type="button" class="btn">Cerrar</button></div><div class="nc-stack"><div class="nc-sub">Canal</div><button class="canal-option btn" data-canal="Canal Detalle" type="button">Canal Detalle</button><button class="canal-option btn" data-canal="Super 24" type="button">Super 24</button><button class="canal-option btn" data-canal="Cruz Verde" type="button">Cruz Verde</button></div><div class="nc-divider"></div><div class="nc-stack"><div class="nc-sub">Motivo del cambio</div><button class="motivo-option btn" data-motivo="50" type="button">Falta de energía eléctrica (50%)</button><button class="motivo-option btn" data-motivo="100" type="button">Falla del congelador (100%)</button></div></div></div>
 
   <script>
     const $ = s => document.querySelector(s);
     const $$ = s => [...document.querySelectorAll(s)];
     const Q = n => new Intl.NumberFormat('es-GT', { style:'currency', currency:'GTQ', minimumFractionDigits:2 }).format(n || 0);
-    const todayStr = () => new Date().toISOString().slice(0, 10);
+    const todayStr = () => {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    };
     const uid = () => crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now();
     const save = (k,v) => localStorage.setItem(k, JSON.stringify(v));
     const load = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
@@ -223,12 +229,16 @@
 
     function renderDashboard(){
       const list = currentSales();
-      const hoy = Math.max(1, new Date().getDate());
+      // día actual del mes (para calcular ritmo real de ventas)
+      const hoy = new Date().getDate();
+      // evitar divisiones por 0 y no pasar los días hábiles configurados
+      const diasTranscurridos = Math.max(1, Math.min(hoy, cfg.dias));
 
       const total = sum(list);
       const falta = Math.max(0, cfg.presupuesto - total);
       const avance = cfg.presupuesto ? total / cfg.presupuesto * 100 : 0;
-      const proyTotal = (total / hoy) * cfg.dias;
+      // proyección basada en ritmo promedio hasta hoy
+      const proyTotal = (total / diasTranscurridos) * cfg.dias;
       const [nivelGeneral, msgGeneral] = semaforo(avance);
 
       $('#dash-ruta').textContent = cfg.ruta;
@@ -246,7 +256,7 @@
       const congTotal = sum(cong);
       const congClientes = new Set(cong.map(v => v.cliente)).size;
       const congAvance = cfg.presupuesto ? congTotal / cfg.presupuesto * 100 : 0;
-      const congProy = (congTotal / hoy) * cfg.dias;
+      const congProy = (congTotal / diasTranscurridos) * cfg.dias;
 
       $('#kpi-cong-total').textContent = Q(congTotal);
       $('#kpi-cong-clientes').textContent = congClientes + ' clientes';
@@ -260,7 +270,7 @@
       const sinClientes = new Set(sin.map(v => v.cliente)).size;
       const sinMeta = cfg.vscMeta || 0;
       const sinAvance = sinMeta ? sinTotal / sinMeta * 100 : 0;
-      const sinProy = (sinTotal / hoy) * cfg.dias;
+      const sinProy = (sinTotal / diasTranscurridos) * cfg.dias;
 
       $('#kpi-sin-total').textContent = Q(sinTotal);
       $('#kpi-sin-clientes').textContent = sinClientes + ' clientes';
@@ -289,7 +299,10 @@
       const nombre = $('#cliente-nombre').value.trim(), tipo = $('#cliente-tipo').value;
       if(!nombre) return alert('Escribe el nombre del negocio');
       db[cfg.ruta] ??= emptyRoute();
-      db[cfg.ruta][tipo === 'congelador' ? 'congelador' : 'sin'].push(nombre);
+      const bucket = tipo === 'congelador' ? 'congelador' : 'sin';
+      const existe = db[cfg.ruta][bucket].some(c => c.toLowerCase() === nombre.toLowerCase());
+      if(existe) return alert('Ese cliente ya existe en esta ruta.');
+      db[cfg.ruta][bucket].push(nombre);
       save(KEY_CLIENTS, db);
       $('#cliente-nombre').value = '';
       renderAll();
@@ -409,7 +422,7 @@
       console.assert(semaforo(60)[0] === 'warn', '60% debe ser warn');
       console.assert(semaforo(20)[0] === 'danger', '20% debe ser danger');
       console.assert(sum([{monto:10},{monto:5.5}]) === 15.5, 'sum debe sumar montos');
-      console.assert(getPrice('Paleta Arcoiris') === 2.09, 'Precio Canal Detalle Paleta Arcoiris');
+      console.assert(getPrice('Arcoiris') === 2.25, 'Precio Canal Detalle Arcoiris');
     }
 
     $$('.tab').forEach(b => b.onclick = e => { e.preventDefault(); switchTab(b.dataset.tab); });
