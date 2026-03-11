@@ -16,27 +16,48 @@
     :root{
       --bg:#F2F2F7;--surface:#fff;--text:#111111;--muted:#6e6e73;--brand:#2C6E7F;
       --ok:#34C759;--warn:#FFCC00;--danger:#FF3B30;--border:#E5E7EB;
-      --shadow:0 6px 20px rgba(0,0,0,.06)
+      --shadow:none
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial;background:var(--bg);color:var(--text);-webkit-text-size-adjust:100%;touch-action:manipulation}
     .app{max-width:420px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
-    .topbar{position:sticky;top:0;z-index:20;background:rgba(242,242,247,.86);backdrop-filter:saturate(180%) blur(18px);display:flex;align-items:center;justify-content:center;padding:12px 12px 10px;border-bottom:1px solid rgba(229,231,235,.9)}
-    .tabs{display:flex;gap:8px;justify-content:center;align-items:center;padding:2px 0;width:100%}
-    .tab{appearance:none;border:none;background:transparent;padding:8px 0;border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;transition:.18s ease;min-height:40px;min-width:54px;flex:0 0 54px}
-    .tab svg{width:22px;height:22px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
-    .tab.active{background:linear-gradient(180deg,#fff 0%,#fbfbfd 100%);color:var(--text);box-shadow:0 8px 20px rgba(15,23,42,.08);transform:translateY(-1px);border:1px solid rgba(229,231,235,.9)}
+    .topbar{position:sticky;top:0;z-index:20;background:rgba(242,242,247,.92);backdrop-filter:saturate(180%) blur(18px);display:flex;align-items:center;justify-content:center;padding:8px 10px 6px;border-bottom:none}
+    .tabs{display:flex;gap:6px;justify-content:center;align-items:center;padding:0;width:100%}
+    .tab{appearance:none;border:none;background:transparent;padding:6px 0;border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;transition:.18s ease;min-height:36px;min-width:50px;flex:0 0 50px}
+    .tab svg{width:21px;height:21px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .tab.active{background:#ffffff;color:var(--text);box-shadow:none;transform:translateY(-1px);border:none}
     main{padding:10px 12px 14px;flex:1}
     section{display:none}
     section.active{display:block}
-    .card{background:linear-gradient(180deg,#ffffff 0%,#fbfbfd 100%);border:1px solid rgba(229,231,235,.9);border-radius:20px;box-shadow:0 12px 30px rgba(15,23,42,.07);padding:14px;margin-bottom:10px}
+    .card{background:#ffffff;border:none;border-radius:20px;box-shadow:none;padding:16px;margin-bottom:10px}
     .card h3{margin:0;font-size:17px;font-weight:600;letter-spacing:-.01em}
     .card-head,.subrow,.toolbar,.row{display:flex;gap:10px}
     .card-head,.subrow,.row{align-items:center;justify-content:space-between}
     .row>*{flex:1;min-width:0}
     .pill{font-size:14px;color:#6B7280;border:1px solid rgba(229,231,235,.95);background:#F2F2F7;padding:5px 10px;border-radius:999px;font-weight:600}
     .big{font-size:22px;font-weight:800;letter-spacing:-.01em;line-height:1.1;color:#111111}
+#kpi-presupuesto::first-letter,
+#kpi-global-proy::first-letter,
+#kpi-cong-total::first-letter,
+#kpi-cong-meta::first-letter,
+#kpi-cong-proy::first-letter,
+#kpi-sin-total::first-letter,
+#kpi-sin-meta::first-letter,
+#kpi-sin-proy::first-letter,
+#kpi-vendido::first-letter,
+#kpi-falta::first-letter{
+  font-size:14px;
+  margin-right:2px;
+  opacity:.9
+}
+#kpi-cong-avance::first-letter,
+#kpi-sin-avance::first-letter,
+#kpi-global-avance::first-letter{
+  font-size:inherit;
+  margin-right:0;
+  opacity:1
+}
     .muted{color:#8e8e93;font-size:12px;font-weight:500}
     .text-right{text-align:right}
     .mt-8{margin-top:6px}
@@ -52,16 +73,9 @@
     .kpi-main-row{gap:24px}
     .kpi-block{display:flex;flex-direction:column;flex:1}
     .kpi-label{font-size:12px;color:var(--muted)}
-    .kpi-value{font-size:14px;font-weight:700;color:#111111}
-    .status-dot{display:inline-block;width:10px;height:10px;border-radius:999px;margin-right:8px;vertical-align:middle}
-    .status-ok{background:var(--ok)}
-    .status-warn{background:var(--warn)}
-    .status-danger{background:var(--danger)}
-    .semaforo-ok{border-color:rgba(52,199,89,.35);box-shadow:0 0 0 1px rgba(52,199,89,.08), var(--shadow)}
-    .semaforo-warn{border-color:rgba(255,204,0,.5);box-shadow:0 0 0 1px rgba(255,204,0,.10), var(--shadow)}
-    .semaforo-danger{border-color:rgba(255,59,48,.28);box-shadow:0 0 0 1px rgba(255,59,48,.08), var(--shadow)}
+    .kpi-value{font-size:17px;font-weight:800;color:#111111}
     .status-line{margin-top:8px;font-size:13px;font-weight:700}
-    .progress{height:12px;border-radius:999px;background:linear-gradient(180deg,#f4f4f7,#e9e9ef);overflow:hidden;border:1px solid var(--border);margin-top:6px;box-shadow:inset 0 2px 4px rgba(0,0,0,.06)}
+    .progress{height:12px;border-radius:999px;background:#e9e9ef;overflow:hidden;border:none;margin-top:6px;box-shadow:none}
     .progress>div{height:100%;width:0%;transition:width .45s ease;border-radius:999px;background:linear-gradient(90deg,var(--brand),#4fa3b6);box-shadow:0 2px 6px rgba(44,110,127,.35)}
     label{font-size:12px;color:var(--muted);display:block;margin-bottom:7px;font-weight:700;letter-spacing:.01em}
     input,select{width:100%;padding:14px;border-radius:14px;border:1px solid rgba(229,231,235,.95);background:#FBFBFE;font-size:16px;color:var(--text);box-shadow:inset 0 1px 0 rgba(255,255,255,.65)}
@@ -162,7 +176,30 @@
   </div>
 
   <div class="modal" id="modal-edit"><div class="modal-card"><h3>Editar venta</h3><div class="row mt-8"><div><label>Monto (Q)</label><input id="edit-monto" type="number"></div><div><label>Fecha</label><input id="edit-fecha" type="date"></div></div><div class="toolbar"><button class="btn" id="edit-cancel">Cancelar</button><button class="btn primary" id="edit-save">Guardar cambios</button></div></div></div>
-  <div id="canalModal" class="nc-sheet-modal hidden"><div class="nc-sheet"><div class="nc-handle"></div><div class="row" style="margin-bottom:10px"><div><div class="nc-title" style="font-size:18px">Canal y motivo</div><div class="nc-sub">Selecciona ambos dentro de esta misma ventana.</div></div><button id="btnCloseCanal" type="button" class="btn">Cerrar</button></div><div class="nc-stack"><div class="nc-sub">Canal</div><button class="canal-option btn" data-canal="Canal Detalle" type="button">Canal Detalle</button><button class="canal-option btn" data-canal="Super 24" type="button">Super 24</button><button class="canal-option btn" data-canal="Cruz Verde" type="button">Cruz Verde</button></div><div class="nc-divider"></div><div class="nc-stack"><div class="nc-sub">Motivo del cambio</div><button class="motivo-option btn" data-motivo="50" type="button">Falta de energía eléctrica (50%)</button><button class="motivo-option btn" data-motivo="100" type="button">Falla del congelador (100%)</button></div></div></div></div></div>
+  <div id="canalModal" class="nc-sheet-modal hidden">
+    <div class="nc-sheet">
+      <div class="nc-handle"></div>
+      <div class="row" style="margin-bottom:10px">
+        <div>
+          <div class="nc-title" style="font-size:18px">Canal y motivo</div>
+          <div class="nc-sub">Selecciona ambos dentro de esta misma ventana.</div>
+        </div>
+        <button id="btnCloseCanal" type="button" class="btn">Cerrar</button>
+      </div>
+      <div class="nc-stack">
+        <div class="nc-sub">Canal</div>
+        <button class="canal-option btn" data-canal="Canal Detalle" type="button">Canal Detalle</button>
+        <button class="canal-option btn" data-canal="Super 24" type="button">Super 24</button>
+        <button class="canal-option btn" data-canal="Cruz Verde" type="button">Cruz Verde</button>
+      </div>
+      <div class="nc-divider"></div>
+      <div class="nc-stack">
+        <div class="nc-sub">Motivo del cambio</div>
+        <button class="motivo-option btn" data-motivo="50" type="button">Falta de energía eléctrica (50%)</button>
+        <button class="motivo-option btn" data-motivo="100" type="button">Falla del congelador (100%)</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     if ('serviceWorker' in navigator) {
@@ -175,7 +212,13 @@
     const $ = s => document.querySelector(s);
     const $$ = s => [...document.querySelectorAll(s)];
     const Q = n => new Intl.NumberFormat('es-GT', { style:'currency', currency:'GTQ', minimumFractionDigits:2 }).format(n || 0);
-    const todayStr = () => new Date().toISOString().slice(0, 10);
+    const todayStr = () => {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    };
     const uid = () => crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now();
     const save = (k,v) => localStorage.setItem(k, JSON.stringify(v));
     const load = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
@@ -194,17 +237,6 @@
 
     const routeData = () => db[cfg.ruta] || emptyRoute();
     const currentSales = () => sales.filter(v => v.ruta===cfg.ruta && v.mes===cfg.mes && v.anio===cfg.anio).sort((a,b) => b.fecha.localeCompare(a.fecha));
-
-    function semaforo(pct){
-      return pct >= 100 ? ['ok','Meta alcanzada'] : pct >= 60 ? ['warn','Cerca de la meta'] : ['danger','Aún lejos, impulsa ventas'];
-    }
-
-    function applySemaforo(el, pct){
-      if(!el) return;
-      el.classList.remove('semaforo-ok','semaforo-warn','semaforo-danger');
-      const [nivel] = semaforo(pct);
-      el.classList.add('semaforo-' + nivel);
-    }
 
     function switchTab(tab){
       $$('.tab').forEach(b => {
@@ -236,7 +268,7 @@
       const falta = Math.max(0, cfg.presupuesto - total);
       const avance = cfg.presupuesto ? total / cfg.presupuesto * 100 : 0;
       const proyTotal = (total / hoy) * cfg.dias;
-      const [nivelGeneral, msgGeneral] = semaforo(avance);
+      const msgGeneral = avance >= 100 ? 'Meta alcanzada' : avance >= 60 ? 'Cerca de la meta' : 'Aún lejos, impulsa ventas';
 
       $('#dash-ruta').textContent = cfg.ruta;
       $('#kpi-presupuesto').textContent = Q(cfg.presupuesto);
@@ -244,10 +276,9 @@
       $('#kpi-falta').textContent = Q(falta);
       $('#kpi-global-avance').textContent = avance.toFixed(1) + '%';
       $('#kpi-global-proy').textContent = Q(proyTotal);
-      $('#coach-msg').innerHTML = `<span class="status-dot status-${nivelGeneral}"></span>${msgGeneral}`;
+      $('#coach-msg').textContent = msgGeneral;
       $('#progress-bar').style.width = Math.min(100, avance).toFixed(1) + '%';
       $('#progress-bar').style.background = avance>=100 ? 'var(--ok)' : avance>=60 ? 'var(--warn)' : 'var(--danger)';
-      applySemaforo($('#card-general'), avance);
 
       const cong = list.filter(v => v.tipo === 'congelador');
       const congTotal = sum(cong);
@@ -260,7 +291,6 @@
       $('#kpi-cong-meta').textContent = Q(cfg.presupuesto);
       $('#kpi-cong-avance').textContent = congAvance.toFixed(1) + '%';
       $('#kpi-cong-proy').textContent = Q(congProy);
-      applySemaforo($('#card-cong'), congAvance);
 
       const sin = list.filter(v => v.tipo === 'sin');
       const sinTotal = sum(sin);
@@ -274,7 +304,6 @@
       $('#kpi-sin-meta').textContent = Q(sinMeta);
       $('#kpi-sin-avance').textContent = sinAvance.toFixed(1) + '%';
       $('#kpi-sin-proy').textContent = Q(sinProy);
-      applySemaforo($('#card-sin'), sinAvance);
     }
 
     function renderDb(){
