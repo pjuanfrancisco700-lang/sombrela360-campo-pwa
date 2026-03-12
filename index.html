@@ -196,7 +196,55 @@
     const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
     const emptyRoute = () => ({ congelador: [], sin: [] });
     const DEFAULT_DB = {17029:{congelador:['Caseta Azul (Ixcanal)','Super 24 Minerva'],sin:['Variedades Génesis','Comedor Mary','Tienda Yanira']}};
-    const PRODUCTOS = [];
+    const PRODUCTOS = [
+{name:'Fresa',detalle:4.50,super24:4.19,cruzVerde:0},
+{name:'Guanaba',detalle:4.50,super24:4.19,cruzVerde:0},
+{name:'Mora',detalle:4.50,super24:4.19,cruzVerde:0},
+{name:'Jocote',detalle:4.50,super24:4.19,cruzVerde:0},
+{name:'Mango Verde Pepitoria',detalle:4.50,super24:4.19,cruzVerde:0},
+{name:'Limon Dieta',detalle:6.30,super24:0,cruzVerde:0},
+{name:'Mandarina Dieta',detalle:6.30,super24:0,cruzVerde:0},
+{name:'Fresa Dieta',detalle:6.30,super24:0,cruzVerde:0},
+{name:'Mango Dieta',detalle:6.30,super24:0,cruzVerde:0},
+{name:'Yogurt de Fresa',detalle:6.30,super24:0,cruzVerde:0},
+{name:'Yogurt de Melocoton',detalle:6.30,super24:0,cruzVerde:0},
+{name:'Vainilla',detalle:4.50,super24:0,cruzVerde:0},
+{name:'Chocolate',detalle:4.50,super24:0,cruzVerde:0},
+{name:'Limon',detalle:4.50,super24:4.50,cruzVerde:0},
+{name:'Mandarina',detalle:4.50,super24:0,cruzVerde:0},
+{name:'Mango',detalle:4.50,super24:4.50,cruzVerde:0},
+{name:'Naranja con Pepitoria',detalle:4.50,super24:0,cruzVerde:0},
+{name:'Piña con Pepitoria',detalle:4.50,super24:0,cruzVerde:0},
+{name:'Tamarindo con Tajin',detalle:4.50,super24:0,cruzVerde:0},
+{name:'Nance',detalle:4.50,super24:0,cruzVerde:0},
+{name:'Paleta de Nutela',detalle:7.50,super24:0,cruzVerde:0},
+{name:'Paleta Morena',detalle:5.25,super24:0,cruzVerde:0},
+{name:'Paleta Chocolate Crispy',detalle:4.50,super24:4.19,cruzVerde:0},
+{name:'Paleta Chocolate Cream',detalle:3.75,super24:0,cruzVerde:0},
+{name:'Paleta de Mantequilla de Mani',detalle:7.50,super24:0,cruzVerde:0},
+{name:'Chocobanano Con Mani P',detalle:5.25,super24:4.87,cruzVerde:0},
+{name:'Chocobanano Sin Mani P',detalle:4.50,super24:4.50,cruzVerde:0},
+{name:'Cholapiz',detalle:1.87,super24:0,cruzVerde:0},
+{name:'Arcoiris',detalle:2.25,super24:2.09,cruzVerde:0},
+{name:'Twist Arcoiris',detalle:3.75,super24:3.48,cruzVerde:0},
+{name:'Mixta Piñata',detalle:0.75,super24:0,cruzVerde:0},
+{name:'Cremosa Mandarina',detalle:3.00,super24:2.79,cruzVerde:0},
+{name:'Cremosa Uva',detalle:3.00,super24:0,cruzVerde:0},
+{name:'Cremosa Granadina',detalle:3.00,super24:2.79,cruzVerde:0},
+{name:'Cremosa Frambuesa',detalle:3.00,super24:2.78,cruzVerde:0},
+{name:'Cremosa Arandano',detalle:3.00,super24:2.78,cruzVerde:0},
+{name:'Twist Sipi Manzana Limon',detalle:3.75,super24:3.48,cruzVerde:0},
+{name:'Twist Sipi Punch Uva',detalle:3.75,super24:3.48,cruzVerde:0},
+{name:'Morena Cookies And Cream',detalle:6.00,super24:0,cruzVerde:0},
+{name:'Morena Con Cajeta',detalle:6.00,super24:0,cruzVerde:0},
+{name:'Paleta Coco',detalle:0,super24:4.19,cruzVerde:0},
+{name:'Chocobanano Mixto',detalle:0,super24:26.00,cruzVerde:0},
+{name:'Chocobanano Con Mani G',detalle:0,super24:8.40,cruzVerde:0},
+{name:'Paleta Vainilla',detalle:0,super24:4.50,cruzVerde:0},
+{name:'Caja Chapina',detalle:0,super24:22.97,cruzVerde:0},
+{name:'Helado Paleta Arcoiris',detalle:0,super24:2.09,cruzVerde:0},
+{name:'Helado Paleta Chocolate Crispy',detalle:0,super24:4.19,cruzVerde:0}
+    ];
     const MOTIVOS = {'50':{label:'Falta de energía eléctrica',factor:.5},'100':{label:'Falla del generador',factor:1}};
 
     let cfg = load(KEY_CFG) || { mes:new Date().getMonth()+1, anio:new Date().getFullYear(), ruta:'17029', dias:26, presupuesto:8500, vscMeta:400 };
