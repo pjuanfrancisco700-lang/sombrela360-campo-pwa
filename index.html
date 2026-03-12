@@ -39,8 +39,7 @@
     .big{font-size:24px;font-weight:800;letter-spacing:-.03em}
     .muted{color:var(--muted);font-size:13px}
     .text-right{text-align:right}
-    .mt-8{margin-top:2px}
-    .mt-10{margin-top:10px}
+    .mt-8{margin-top:8px}.mt-10{margin-top:10px}
     .hidden{display:none!important}
     .route-label{font-size:16px;color:var(--muted);font-weight:700}
     .route-value{color:#9CA3AF}
@@ -54,13 +53,11 @@
     .kpi-label{font-size:12px;color:var(--muted)}
     .kpi-value{font-size:16px;font-weight:800}
     .status-dot{display:inline-block;width:10px;height:10px;border-radius:999px;margin-right:8px;vertical-align:middle}
-    .status-ok{background:var(--ok)}
-    .status-warn{background:var(--warn)}
-    .status-danger{background:var(--danger)}
+    .status-ok{background:var(--ok)} .status-warn{background:var(--warn)} .status-danger{background:var(--danger)}
     .semaforo-ok{border-color:rgba(52,199,89,.35);box-shadow:0 0 0 1px rgba(52,199,89,.08), var(--shadow)}
     .semaforo-warn{border-color:rgba(255,204,0,.5);box-shadow:0 0 0 1px rgba(255,204,0,.10), var(--shadow)}
     .semaforo-danger{border-color:rgba(255,59,48,.28);box-shadow:0 0 0 1px rgba(255,59,48,.08), var(--shadow)}
-    .status-line{margin-top:0px;font-size:13px;font-weight:700}
+    .status-line{margin-top:0;font-size:13px;font-weight:700}
     .progress{height:12px;border-radius:999px;background:#EEE;overflow:hidden;border:1px solid var(--border);margin-top:2px}
     .progress>div{height:100%;width:0%;transition:width .4s ease;border-radius:999px}
     label{font-size:12px;color:var(--muted);display:block;margin-bottom:7px;font-weight:700;letter-spacing:.01em}
@@ -69,6 +66,7 @@
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 14px;border-radius:14px;border:1px solid rgba(229,231,235,.95);background:linear-gradient(180deg,#fff 0%,#fafafd 100%);font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 4px 12px rgba(15,23,42,.04)}
     .btn.primary{background:linear-gradient(180deg,#337d8f 0%,#2C6E7F 100%);border-color:transparent;color:#fff;box-shadow:0 10px 20px rgba(44,110,127,.22)}
     .btn.danger{background:linear-gradient(180deg,#ff5d55 0%,var(--danger) 100%);color:#fff;border-color:transparent;box-shadow:0 10px 20px rgba(255,59,48,.18)}
+    .btn.icon{width:46px;min-width:46px;padding:11px}
     .toolbar{flex-wrap:wrap;margin-top:10px}
     .ventas-toolbar{position:sticky;bottom:0;padding-top:10px;padding-bottom:env(safe-area-inset-bottom,8px);background:linear-gradient(to top, rgba(242,242,247,.98), rgba(242,242,247,.9), transparent)}
     .ventas-toolbar .btn.primary{width:100%}
@@ -76,9 +74,17 @@
     th,td{padding:10px 8px;border-bottom:1px solid rgba(229,231,235,.8);font-size:12px;text-align:left;vertical-align:top}
     th{color:var(--muted);font-weight:700}
     .collapsible{border-top:1px dashed var(--border);margin-top:8px;padding-top:8px}
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:30}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:80}
     .modal.active{display:flex}
-    .modal-card{width:100%;max-width:400px;background:linear-gradient(180deg,#fff 0%,#fcfcfe 100%);border:1px solid rgba(229,231,235,.95);border-radius:20px;box-shadow:0 18px 48px rgba(15,23,42,.14);padding:16px}
+    .modal-card{width:100%;max-width:400px;background:linear-gradient(180deg,#fff 0%,#fcfcfe 100%);border:1px solid rgba(229,231,235,.95);border-radius:20px;box-shadow:0 18px 48px rgba(15,23,42,.14);padding:16px;max-height:88vh;overflow:auto}
+    .history-tabs{display:flex;gap:8px;margin-top:10px}
+    .seg-btn{flex:1;padding:10px 12px;border-radius:12px;border:1px solid rgba(229,231,235,.95);background:#F7F7FB;font-weight:800;color:var(--muted);cursor:pointer}
+    .seg-btn.active{background:#fff;color:var(--text);box-shadow:0 6px 14px rgba(15,23,42,.06)}
+    .history-item{border:1px solid rgba(229,231,235,.95);border-radius:16px;padding:12px;background:linear-gradient(180deg,#fff 0%,#fcfcfe 100%);margin-top:10px}
+    .history-name{font-size:15px;font-weight:800}
+    .history-meta{font-size:12px;color:var(--muted);margin-top:3px}
+    .history-total{font-size:18px;font-weight:800;margin-top:8px}
+    .history-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
     .nc-wrap{display:flex;flex-direction:column;gap:12px}
     .nc-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:16px;border:1px solid rgba(229,231,235,.95);background:linear-gradient(180deg,#fff 0%,#fbfbfe 100%);font-weight:800;color:var(--text);cursor:pointer;box-shadow:0 6px 16px rgba(15,23,42,.04)}
     .nc-title{font-weight:800;font-size:16px;letter-spacing:-.02em}
@@ -102,6 +108,7 @@
     .nc-stack{display:flex;flex-direction:column;gap:10px}.nc-divider{height:1px;background:#f0eff4;margin:14px 0}
     .nc-cart-row{justify-content:space-between;gap:8px;align-items:center;border:1px solid rgba(229,231,235,.95);border-radius:14px;padding:10px;background:linear-gradient(180deg,#fff 0%,#fcfcfe 100%)}
     .nc-actions button,.nc-sheet button,.nc-item button{padding:10px 12px;border-radius:14px;border:1px solid rgba(229,231,235,.95);background:linear-gradient(180deg,#fff 0%,#fafafd 100%);font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(15,23,42,.04)}
+    .detail-list{margin:8px 0 0;padding-left:18px}
   </style>
 </head>
 <body>
@@ -154,15 +161,64 @@
         </div>
       </section>
 
-      <section id="ventas"><div class="card"><div class="card-head"><h3>Registrar venta</h3></div><div class="row"><div><label>Tipo de cliente</label><select id="venta-tipo" class="ios-select"><option value="congelador">Con congelador</option><option value="sin">Sin congelador</option></select></div><div><label>Cliente</label><select id="venta-cliente" class="ios-select"></select></div></div><div class="row mt-8"><div><label>Monto (Q)</label><input id="venta-monto" type="number" step="0.01" placeholder="0.00"></div></div><div class="toolbar ventas-toolbar"><button class="btn primary" id="add-venta">Agregar venta</button></div></div><div class="card"><div class="card-head"><h3>Historial de ventas</h3></div><table id="tabla-ventas"><thead><tr><th>Fecha</th><th>Tipo</th><th>Cliente</th><th>Monto</th><th>Acciones</th></tr></thead><tbody></tbody></table></div></section>
-      <section id="clientes"><div class="card"><div class="card-head"><h3>Crear cliente</h3></div><div class="row"><div><label>Nombre del negocio</label><input id="cliente-nombre" placeholder="Ej. Tienda Emanuel"></div><div><label>Tipo</label><select id="cliente-tipo" class="ios-select"><option value="congelador">Con congelador</option><option value="sin">Sin congelador</option></select></div></div><div class="toolbar"><button class="btn primary" id="btn-add-cliente">Agregar cliente</button></div><div class="collapsible"><button class="btn" id="toggle-db">Mostrar/Ocultar base de datos</button><div id="db-list" class="hidden mt-8"></div></div></div></section>
-      <section id="nc"><div class="nc-wrap"><div class="card"><div class="nc-sub">Canal</div><button id="btnOpenCanal" class="nc-btn" type="button"><span id="canalActualLabel">Canal Detalle · 50%</span><span class="muted" style="font-size:18px">▾</span></button></div><div class="card"><input id="search" type="text" placeholder="Buscar producto…"><div id="list" class="nc-list"></div></div><div class="card"><div class="row"><div class="nc-title" style="font-size:14px">Resumen</div><button id="btnClear" type="button" class="btn">Limpiar</button></div><div id="cart" class="nc-wrap mt-8"></div><div class="nc-kpi"><div class="nc-k"><div class="label">Subtotal</div><div id="subtotal" class="value">Q0.00</div></div><div class="nc-k"><div class="label">Motivo</div><div id="motivoLabel" class="value">Falta de energía eléctrica (50%)</div></div><div class="nc-k full"><div class="label">Monto real a aplicar</div><div id="aplicar" class="value" style="font-size:20px">Q0.00</div><div class="nc-note">Nota: se aplica el <span id="motivoPct">50</span>% sobre el subtotal.</div></div></div></div></div></section>
+      <section id="ventas">
+        <div class="card">
+          <div class="card-head"><h3>Registrar venta</h3></div>
+          <div class="row">
+            <div><label>Tipo de cliente</label><select id="venta-tipo" class="ios-select"><option value="congelador">Con congelador</option><option value="sin">Sin congelador</option></select></div>
+            <div><label>Cliente</label><select id="venta-cliente" class="ios-select"></select></div>
+          </div>
+          <div class="row mt-8"><div><label>Monto (Q)</label><input id="venta-monto" type="number" step="0.01" placeholder="0.00"></div></div>
+          <div class="toolbar ventas-toolbar"><button class="btn primary" id="add-venta">Agregar venta</button></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Historial</h3></div>
+          <div class="history-tabs">
+            <button class="seg-btn active" id="hist-tab-ventas">Ventas</button>
+            <button class="seg-btn" id="hist-tab-nc">NC</button>
+          </div>
+          <div id="historial-wrap"></div>
+        </div>
+      </section>
+
+      <section id="clientes">
+        <div class="card"><div class="card-head"><h3>Crear cliente</h3></div><div class="row"><div><label>Nombre del negocio</label><input id="cliente-nombre" placeholder="Ej. Tienda Emanuel"></div><div><label>Tipo</label><select id="cliente-tipo" class="ios-select"><option value="congelador">Con congelador</option><option value="sin">Sin congelador</option></select></div></div><div class="toolbar"><button class="btn primary" id="btn-add-cliente">Agregar cliente</button></div><div class="collapsible"><button class="btn" id="toggle-db">Mostrar/Ocultar base de datos</button><div id="db-list" class="hidden mt-8"></div></div></div>
+      </section>
+
+      <section id="nc">
+        <div class="nc-wrap">
+          <div class="card"><div class="nc-sub">Canal</div><button id="btnOpenCanal" class="nc-btn" type="button"><span id="canalActualLabel">Canal Detalle · 50%</span><span class="muted" style="font-size:18px">▾</span></button></div>
+          <div class="card"><input id="search" type="text" placeholder="Buscar producto…"><div id="list" class="nc-list"></div></div>
+          <div class="card">
+            <div class="row"><div class="nc-title" style="font-size:14px">Resumen</div><button id="btnClear" type="button" class="btn">Limpiar</button></div>
+            <div id="cart" class="nc-wrap mt-8"></div>
+            <div class="nc-kpi">
+              <div class="nc-k"><div class="label">Total</div><div id="subtotal" class="value">Q0.00</div></div>
+              <div class="nc-k"><div class="label">Motivo</div><div id="motivoLabel" class="value">Falta de energía eléctrica</div></div>
+              <div class="nc-k full"><div class="label">Monto visible en pantalla</div><div id="aplicar" class="value" style="font-size:20px">Q0.00</div><div class="nc-note">Nota: aquí puede seguir mostrándose el cálculo del <span id="motivoPct">50</span>%.</div></div>
+            </div>
+            <div class="toolbar">
+              <button class="btn primary" id="btnEnviarNc">Enviar</button>
+              <button class="btn icon" id="btnGuardarNc" title="Guardar NC" aria-label="Guardar NC">💾</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="config"><div class="card"><div class="card-head"><h3>Periodo y parámetros</h3></div><div class="row"><div><label>Mes / Año</label><div class="row row-tight"><select id="cfg-mes" class="ios-select"></select><select id="cfg-anio" class="ios-select"></select></div></div></div><div class="row mt-10"><div><label>Ruta</label><input id="cfg-ruta" value="17029"></div><div><label>Días hábiles</label><input id="cfg-dias" type="number" value="26"></div></div><div class="row mt-10"><div><label>Presupuesto general (Q)</label><input id="cfg-presupuesto" type="number" step="0.01" value="8500"></div><div><label>Ventas sin congelador (Q)</label><input id="cfg-vsc" type="number" step="0.01" value="400"></div></div><div class="toolbar"><button class="btn primary" id="btn-guardar">GUARDAR</button><button class="btn danger" id="btn-reset">REINICIAR</button></div></div></section>
     </main>
   </div>
 
   <div class="modal" id="modal-edit"><div class="modal-card"><h3>Editar venta</h3><div class="row mt-8"><div><label>Monto (Q)</label><input id="edit-monto" type="number" step="0.01"></div><div><label>Fecha</label><input id="edit-fecha" type="date"></div></div><div class="toolbar"><button class="btn" id="edit-cancel">Cancelar</button><button class="btn primary" id="edit-save">Guardar cambios</button></div></div></div>
-  <div id="canalModal" class="nc-sheet-modal hidden"><div class="nc-sheet"><div class="nc-handle"></div><div class="row" style="margin-bottom:10px"><div><div class="nc-title" style="font-size:18px">Canal y motivo</div><div class="nc-sub">Selecciona ambos dentro de esta misma ventana.</div></div><button id="btnCloseCanal" type="button" class="btn">Cerrar</button></div><div class="nc-stack"><div class="nc-sub">Canal</div><button class="canal-option btn" data-canal="Canal Detalle" type="button">Canal Detalle</button><button class="canal-option btn" data-canal="Super 24" type="button">Super 24</button><button class="canal-option btn" data-canal="Cruz Verde" type="button">Cruz Verde</button></div><div class="nc-divider"></div><div class="nc-stack"><div class="nc-sub">Motivo del cambio</div><button class="motivo-option btn" data-motivo="50" type="button">Falta de energía eléctrica (50%)</button><button class="motivo-option btn" data-motivo="100" type="button">Falla del congelador (100%)</button></div></div></div>
+
+  <div class="modal" id="modal-save-nc"><div class="modal-card"><h3 id="save-nc-title">Guardar NC</h3><label class="mt-8">Seleccionar cliente</label><select id="save-nc-cliente" class="ios-select"></select><div class="toolbar"><button class="btn" id="save-nc-cancel">Cancelar</button><button class="btn primary" id="save-nc-confirm">Guardar</button></div></div></div>
+
+  <div class="modal" id="modal-view-nc"><div class="modal-card"><h3>Detalle NC</h3><div id="view-nc-body" class="mt-8"></div><div class="toolbar"><button class="btn primary" id="view-nc-close">Cerrar</button></div></div></div>
+
+  <div class="modal" id="modal-delete-nc"><div class="modal-card"><h3>Eliminar registro</h3><div class="muted mt-8">¿Desea eliminar este registro?</div><div class="toolbar"><button class="btn" id="delete-nc-cancel">Cancelar</button><button class="btn danger" id="delete-nc-confirm">Borrar</button></div></div></div>
+
+  <div id="canalModal" class="nc-sheet-modal hidden"><div class="nc-sheet"><div class="nc-handle"></div><div class="row" style="margin-bottom:10px"><div><div class="nc-title" style="font-size:18px">Canal y motivo</div><div class="nc-sub">Selecciona ambos dentro de esta misma ventana.</div></div><button id="btnCloseCanal" type="button" class="btn">Cerrar</button></div><div class="nc-stack"><div class="nc-sub">Canal</div><button class="canal-option btn" data-canal="Canal Detalle" type="button">Canal Detalle</button><button class="canal-option btn" data-canal="Super 24" type="button">Super 24</button><button class="canal-option btn" data-canal="Cruz Verde" type="button">Cruz Verde</button></div><div class="nc-divider"></div><div class="nc-stack"><div class="nc-sub">Motivo del cambio</div><button class="motivo-option btn" data-motivo="50" type="button">Falta de energía eléctrica</button><button class="motivo-option btn" data-motivo="100" type="button">Falla del generador</button></div></div></div>
 
   <script>
     const $ = s => document.querySelector(s);
@@ -181,7 +237,7 @@
     const sum = arr => arr.reduce((a,b) => a + (+b.monto || 0), 0);
     const esc = s => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
-    const KEY_CFG = 's360_cfg', KEY_CLIENTS = 's360_clients', KEY_SALES = 's360_sales';
+    const KEY_CFG = 's360_cfg', KEY_CLIENTS = 's360_clients', KEY_SALES = 's360_sales', KEY_NC = 's360_historial_nc';
     const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
     const emptyRoute = () => ({ congelador: [], sin: [] });
     const DEFAULT_DB = {17029:{congelador:['Caseta Azul (Ixcanal)','Super 24 Minerva'],sin:['Variedades Génesis','Comedor Mary','Tienda Yanira']}};
@@ -189,10 +245,16 @@
     let cfg = load(KEY_CFG) || { mes:new Date().getMonth()+1, anio:new Date().getFullYear(), ruta:'17029', dias:26, presupuesto:8500, vscMeta:400 };
     let db = load(KEY_CLIENTS) || DEFAULT_DB;
     let sales = load(KEY_SALES) || [];
+    let historialNc = load(KEY_NC) || [];
     let editingId = null;
+    let activeHistoryTab = 'ventas';
+    let editingNcId = null;
+    let deleteNcId = null;
 
     const routeData = () => db[cfg.ruta] || emptyRoute();
     const currentSales = () => sales.filter(v => v.ruta===cfg.ruta && v.mes===cfg.mes && v.anio===cfg.anio).sort((a,b) => b.fecha.localeCompare(a.fecha));
+    const currentNc = () => historialNc.filter(v => v.ruta===cfg.ruta && v.mes===cfg.mes && v.anio===cfg.anio).sort((a,b) => b.fecha.localeCompare(a.fecha));
+    const allClients = () => [...routeData().congelador, ...routeData().sin].sort((a,b) => a.localeCompare(b));
 
     function semaforo(pct){
       return pct >= 100 ? ['ok','Meta alcanzada'] : pct >= 60 ? ['warn','Cerca de la meta'] : ['danger','Aún lejos, impulsa ventas'];
@@ -222,22 +284,46 @@
 
     function renderVentas(){
       const rows = currentSales().map(v => `<tr><td>${v.fecha}</td><td>${v.tipo==='congelador'?'Con congelador':'Sin congelador'}</td><td>${esc(v.cliente)}</td><td>${Q(v.monto)}</td><td><button class="btn" data-edit="${v.id}">Editar</button> <button class="btn danger" data-del="${v.id}">Borrar</button></td></tr>`).join('');
-      $('#tabla-ventas tbody').innerHTML = rows || '<tr><td colspan="5" class="muted">Aún no hay ventas registradas.</td></tr>';
-      $$('[data-edit]').forEach(b => b.onclick = () => openEdit(b.dataset.edit));
-      $$('[data-del]').forEach(b => b.onclick = () => delVenta(b.dataset.del));
+      return rows || '<tr><td colspan="5" class="muted">Aún no hay ventas registradas.</td></tr>';
+    }
+
+    function renderHistorial(){
+      $('#hist-tab-ventas').classList.toggle('active', activeHistoryTab === 'ventas');
+      $('#hist-tab-nc').classList.toggle('active', activeHistoryTab === 'nc');
+
+      if(activeHistoryTab === 'ventas'){
+        $('#historial-wrap').innerHTML = `<table id="tabla-ventas"><thead><tr><th>Fecha</th><th>Tipo</th><th>Cliente</th><th>Monto</th><th>Acciones</th></tr></thead><tbody>${renderVentas()}</tbody></table>`;
+        $$('[data-edit]').forEach(b => b.onclick = () => openEdit(b.dataset.edit));
+        $$('[data-del]').forEach(b => b.onclick = () => delVenta(b.dataset.del));
+        return;
+      }
+
+      const list = currentNc();
+      $('#historial-wrap').innerHTML = list.length ? list.map(v => `
+        <div class="history-item">
+          <div class="history-name">${esc(v.cliente)}</div>
+          <div class="history-meta">Canal: ${esc(v.canal)}</div>
+          <div class="history-meta">Motivo: ${esc(v.motivo)}</div>
+          <div class="history-total">Total: ${Q(v.total)}</div>
+          <div class="history-actions">
+            <button class="btn" data-view-nc="${v.id}">Ver</button>
+            <button class="btn" data-edit-nc="${v.id}">Editar</button>
+            <button class="btn danger" data-del-nc="${v.id}">Borrar</button>
+          </div>
+        </div>`).join('') : '<div class="muted mt-8">Aún no hay registros NC guardados.</div>';
+
+      $$('[data-view-nc]').forEach(b => b.onclick = () => openViewNc(b.dataset.viewNc));
+      $$('[data-edit-nc]').forEach(b => b.onclick = () => editNc(b.dataset.editNc));
+      $$('[data-del-nc]').forEach(b => b.onclick = () => askDeleteNc(b.dataset.delNc));
     }
 
     function renderDashboard(){
       const list = currentSales();
-      // día actual del mes (para calcular ritmo real de ventas)
       const hoy = new Date().getDate();
-      // evitar divisiones por 0 y no pasar los días hábiles configurados
       const diasTranscurridos = Math.max(1, Math.min(hoy, cfg.dias));
-
       const total = sum(list);
       const falta = Math.max(0, cfg.presupuesto - total);
       const avance = cfg.presupuesto ? total / cfg.presupuesto * 100 : 0;
-      // proyección basada en ritmo promedio hasta hoy
       const proyTotal = (total / diasTranscurridos) * cfg.dias;
       const [nivelGeneral, msgGeneral] = semaforo(avance);
 
@@ -257,7 +343,6 @@
       const congClientes = new Set(cong.map(v => v.cliente)).size;
       const congAvance = cfg.presupuesto ? congTotal / cfg.presupuesto * 100 : 0;
       const congProy = (congTotal / diasTranscurridos) * cfg.dias;
-
       $('#kpi-cong-total').textContent = Q(congTotal);
       $('#kpi-cong-clientes').textContent = congClientes + ' clientes';
       $('#kpi-cong-meta').textContent = Q(cfg.presupuesto);
@@ -271,7 +356,6 @@
       const sinMeta = cfg.vscMeta || 0;
       const sinAvance = sinMeta ? sinTotal / sinMeta * 100 : 0;
       const sinProy = (sinTotal / diasTranscurridos) * cfg.dias;
-
       $('#kpi-sin-total').textContent = Q(sinTotal);
       $('#kpi-sin-clientes').textContent = sinClientes + ' clientes';
       $('#kpi-sin-meta').textContent = Q(sinMeta);
@@ -335,56 +419,11 @@
     }
 
     const PRODUCTOS = [
-  {name:'Fresa', detalle:4.50, super24:4.19, cruzVerde:0},
-  {name:'Guanaba', detalle:4.50, super24:4.19, cruzVerde:0},
-  {name:'Mora', detalle:4.50, super24:4.19, cruzVerde:0},
-  {name:'Jocote', detalle:4.50, super24:4.19, cruzVerde:0},
-  {name:'Mango Verde Pepitoria', detalle:4.50, super24:4.19, cruzVerde:0},
-  {name:'Limon Dieta', detalle:6.30, super24:0, cruzVerde:0},
-  {name:'Mandarina Dieta', detalle:6.30, super24:0, cruzVerde:0},
-  {name:'Fresa Dieta', detalle:6.30, super24:0, cruzVerde:0},
-  {name:'Mango Dieta', detalle:6.30, super24:0, cruzVerde:0},
-  {name:'Yogurt de Fresa', detalle:6.30, super24:0, cruzVerde:0},
-  {name:'Yogurt de Melocoton', detalle:6.30, super24:0, cruzVerde:0},
-  {name:'Vainilla', detalle:4.50, super24:0, cruzVerde:0},
-  {name:'Chocolate', detalle:4.50, super24:0, cruzVerde:0},
-  {name:'Limon', detalle:4.50, super24:4.50, cruzVerde:0},
-  {name:'Mandarina', detalle:4.50, super24:0, cruzVerde:0},
-  {name:'Mango', detalle:4.50, super24:4.50, cruzVerde:0},
-  {name:'Naranja con Pepitoria', detalle:4.50, super24:0, cruzVerde:0},
-  {name:'Piña con Pepitoria', detalle:4.50, super24:0, cruzVerde:0},
-  {name:'Tamarindo con Tajin', detalle:4.50, super24:0, cruzVerde:0},
-  {name:'Nance', detalle:4.50, super24:0, cruzVerde:0},
-  {name:'Paleta de Nutela', detalle:7.50, super24:0, cruzVerde:0},
-  {name:'Paleta Morena', detalle:5.25, super24:0, cruzVerde:0},
-  {name:'Paleta Chocolate Crispy', detalle:4.50, super24:4.19, cruzVerde:0},
-  {name:'Paleta Chocolate Cream', detalle:3.75, super24:0, cruzVerde:0},
-  {name:'Paleta de Mantequilla de Mani', detalle:7.50, super24:0, cruzVerde:0},
-  {name:'Chocobanano Con Mani P', detalle:5.25, super24:4.87, cruzVerde:0},
-  {name:'Chocobanano Sin Mani P', detalle:4.50, super24:4.50, cruzVerde:0},
-  {name:'Cholapiz', detalle:1.87, super24:0, cruzVerde:0},
-  {name:'Arcoiris', detalle:2.25, super24:2.09, cruzVerde:0},
-  {name:'Twist Arcoiris', detalle:3.75, super24:3.48, cruzVerde:0},
-  {name:'Mixta Piñata', detalle:0.75, super24:0, cruzVerde:0},
-  {name:'Cremosa Mandarina', detalle:3.00, super24:2.79, cruzVerde:0},
-  {name:'Cremosa Uva', detalle:3.00, super24:0, cruzVerde:0},
-  {name:'Cremosa Granadina', detalle:3.00, super24:2.79, cruzVerde:0},
-  {name:'Cremosa Frambuesa', detalle:3.00, super24:2.78, cruzVerde:0},
-  {name:'Cremosa Arandano', detalle:3.00, super24:2.78, cruzVerde:0},
-  {name:'Twist Sipi Manzana Limon', detalle:3.75, super24:3.48, cruzVerde:0},
-  {name:'Twist Sipi Punch Uva', detalle:3.75, super24:3.48, cruzVerde:0},
-  {name:'Morena Cookies And Cream', detalle:6.00, super24:0, cruzVerde:0},
-  {name:'Morena Con Cajeta', detalle:6.00, super24:0, cruzVerde:0},
-  {name:'Paleta Coco', detalle:0, super24:4.19, cruzVerde:0},
-  {name:'Chocobanano Mixto', detalle:0, super24:26.00, cruzVerde:0},
-  {name:'Chocobanano Con Mani G', detalle:0, super24:8.40, cruzVerde:0},
-  {name:'Paleta Vainilla', detalle:0, super24:4.50, cruzVerde:0},
-  {name:'Caja Chapina', detalle:0, super24:22.97, cruzVerde:0},
-  {name:'Helado Paleta Arcoiris', detalle:0, super24:2.09, cruzVerde:0},
-  {name:'Helado Paleta Chocolate Crispy', detalle:0, super24:4.19, cruzVerde:0}
-];
-    const MOTIVOS = {'50':{label:'Falta de energía eléctrica (50%)',factor:.5},'100':{label:'Falla del congelador (100%)',factor:1}};
+      {name:'Fresa', detalle:4.50, super24:4.19, cruzVerde:0},{name:'Guanaba', detalle:4.50, super24:4.19, cruzVerde:0},{name:'Mora', detalle:4.50, super24:4.19, cruzVerde:0},{name:'Jocote', detalle:4.50, super24:4.19, cruzVerde:0},{name:'Mango Verde Pepitoria', detalle:4.50, super24:4.19, cruzVerde:0},{name:'Limon Dieta', detalle:6.30, super24:0, cruzVerde:0},{name:'Mandarina Dieta', detalle:6.30, super24:0, cruzVerde:0},{name:'Fresa Dieta', detalle:6.30, super24:0, cruzVerde:0},{name:'Mango Dieta', detalle:6.30, super24:0, cruzVerde:0},{name:'Yogurt de Fresa', detalle:6.30, super24:0, cruzVerde:0},{name:'Yogurt de Melocoton', detalle:6.30, super24:0, cruzVerde:0},{name:'Vainilla', detalle:4.50, super24:0, cruzVerde:0},{name:'Chocolate', detalle:4.50, super24:0, cruzVerde:0},{name:'Limon', detalle:4.50, super24:4.50, cruzVerde:0},{name:'Mandarina', detalle:4.50, super24:0, cruzVerde:0},{name:'Mango', detalle:4.50, super24:4.50, cruzVerde:0},{name:'Naranja con Pepitoria', detalle:4.50, super24:0, cruzVerde:0},{name:'Piña con Pepitoria', detalle:4.50, super24:0, cruzVerde:0},{name:'Tamarindo con Tajin', detalle:4.50, super24:0, cruzVerde:0},{name:'Nance', detalle:4.50, super24:0, cruzVerde:0},{name:'Paleta de Nutela', detalle:7.50, super24:0, cruzVerde:0},{name:'Paleta Morena', detalle:5.25, super24:0, cruzVerde:0},{name:'Paleta Chocolate Crispy', detalle:4.50, super24:4.19, cruzVerde:0},{name:'Paleta Chocolate Cream', detalle:3.75, super24:0, cruzVerde:0},{name:'Paleta de Mantequilla de Mani', detalle:7.50, super24:0, cruzVerde:0},{name:'Chocobanano Con Mani P', detalle:5.25, super24:4.87, cruzVerde:0},{name:'Chocobanano Sin Mani P', detalle:4.50, super24:4.50, cruzVerde:0},{name:'Cholapiz', detalle:1.87, super24:0, cruzVerde:0},{name:'Arcoiris', detalle:2.25, super24:2.09, cruzVerde:0},{name:'Twist Arcoiris', detalle:3.75, super24:3.48, cruzVerde:0},{name:'Mixta Piñata', detalle:0.75, super24:0, cruzVerde:0},{name:'Cremosa Mandarina', detalle:3.00, super24:2.79, cruzVerde:0},{name:'Cremosa Uva', detalle:3.00, super24:0, cruzVerde:0},{name:'Cremosa Granadina', detalle:3.00, super24:2.79, cruzVerde:0},{name:'Cremosa Frambuesa', detalle:3.00, super24:2.78, cruzVerde:0},{name:'Cremosa Arandano', detalle:3.00, super24:2.78, cruzVerde:0},{name:'Twist Sipi Manzana Limon', detalle:3.75, super24:3.48, cruzVerde:0},{name:'Twist Sipi Punch Uva', detalle:3.75, super24:3.48, cruzVerde:0},{name:'Morena Cookies And Cream', detalle:6.00, super24:0, cruzVerde:0},{name:'Morena Con Cajeta', detalle:6.00, super24:0, cruzVerde:0},{name:'Paleta Coco', detalle:0, super24:4.19, cruzVerde:0},{name:'Chocobanano Mixto', detalle:0, super24:26.00, cruzVerde:0},{name:'Chocobanano Con Mani G', detalle:0, super24:8.40, cruzVerde:0},{name:'Paleta Vainilla', detalle:0, super24:4.50, cruzVerde:0},{name:'Caja Chapina', detalle:0, super24:22.97, cruzVerde:0},{name:'Helado Paleta Arcoiris', detalle:0, super24:2.09, cruzVerde:0},{name:'Helado Paleta Chocolate Crispy', detalle:0, super24:4.19, cruzVerde:0}
+    ];
+    const MOTIVOS = {'50':{label:'Falta de energía eléctrica',factor:.5},'100':{label:'Falla del generador',factor:1}};
     let canal = 'Canal Detalle', motivoKey = '50', cart = [], query = '';
+
     const getPrice = name => {
       const p = PRODUCTOS.find(i => i.name === name);
       if(!p) return 0;
@@ -394,26 +433,130 @@
       return 0;
     };
 
+    function currentNcDraft(){
+      const subtotal = cart.reduce((a,i) => a + i.qty * getPrice(i.name), 0);
+      return {
+        canal,
+        motivo: MOTIVOS[motivoKey].label,
+        motivoKey,
+        productos: cart.map(i => ({name:i.name, qty:i.qty, precio:getPrice(i.name), total:i.qty * getPrice(i.name)})),
+        subtotal,
+        total: subtotal,
+        fecha: todayStr(),
+        ruta: cfg.ruta,
+        mes: cfg.mes,
+        anio: cfg.anio
+      };
+    }
+
     function renderNc(){
-      const list = (query ? PRODUCTOS.filter(i => i.name.toLowerCase().includes(query.toLowerCase())) : PRODUCTOS);
-      $('#list').innerHTML = list.map(i => { const q = (cart.find(x => x.name === i.name) || {}).qty || 0; return `<div class="nc-item"><div class="nc-left"><div class="row" style="gap:6px;align-items:center"><div class="nc-truncate">${esc(i.name)}</div>${q ? `<span class="nc-chip">x${q}</span>` : ''}</div><div class="muted">${Q(getPrice(i.name))} · ${canal}</div></div><div class="nc-actions"><button data-add="${esc(i.name)}">Agregar</button></div></div>`; }).join('') || '<div class="muted">No hay resultados…</div>';
+      const list = query ? PRODUCTOS.filter(i => i.name.toLowerCase().includes(query.toLowerCase())) : PRODUCTOS;
+      $('#list').innerHTML = list.map(i => {
+        const q = (cart.find(x => x.name === i.name) || {}).qty || 0;
+        return `<div class="nc-item"><div class="nc-left"><div class="row" style="gap:6px;align-items:center"><div class="nc-truncate">${esc(i.name)}</div>${q ? `<span class="nc-chip">x${q}</span>` : ''}</div><div class="muted">${Q(getPrice(i.name))} · ${canal}</div></div><div class="nc-actions"><button data-add="${esc(i.name)}">Agregar</button></div></div>`;
+      }).join('') || '<div class="muted">No hay resultados…</div>';
+
       $('#cart').innerHTML = cart.length ? cart.map(i => `<div class="row nc-cart-row"><div class="nc-left"><div class="nc-truncate">${esc(i.name)}</div><div class="muted">${i.qty} × ${Q(getPrice(i.name))} = <b>${Q(i.qty * getPrice(i.name))}</b></div></div><div class="nc-mini-row"><button data-dec="${esc(i.name)}">-</button><button data-inc="${esc(i.name)}">+</button><button class="nc-danger" data-remove="${esc(i.name)}">Quitar</button></div></div>`).join('') : '<div class="muted">Aún no hay productos seleccionados.</div>';
+
       const subtotal = cart.reduce((a,i) => a + i.qty * getPrice(i.name), 0), mot = MOTIVOS[motivoKey];
       $('#subtotal').textContent = Q(subtotal);
       $('#motivoLabel').textContent = mot.label;
       $('#aplicar').textContent = Q(subtotal * mot.factor);
       $('#motivoPct').textContent = Math.round(mot.factor * 100);
       $('#canalActualLabel').textContent = `${canal} · ${Math.round(mot.factor * 100)}%`;
+      $('#save-nc-title').textContent = editingNcId ? 'Actualizar NC' : 'Guardar NC';
+      $('#save-nc-confirm').textContent = editingNcId ? 'Actualizar' : 'Guardar';
       $$('.canal-option').forEach(b => b.classList.toggle('nc-apply', b.dataset.canal === canal));
       $$('.motivo-option').forEach(b => b.classList.toggle('nc-apply', b.dataset.motivo === motivoKey));
     }
 
     function renderAll(){
       buildClientSelects();
-      renderVentas();
+      renderHistorial();
       renderDashboard();
       renderNc();
       if(!$('#db-list').classList.contains('hidden')) renderDb();
+    }
+
+    function openSaveNcModal(){
+      const draft = currentNcDraft();
+      if(!draft.productos.length) return alert('Agrega al menos un producto antes de guardar.');
+      const clientes = allClients();
+      $('#save-nc-cliente').innerHTML = clientes.length ? clientes.map(c => `<option>${esc(c)}</option>`).join('') : '<option value="">Sin clientes</option>';
+      if(!clientes.length) return alert('No hay clientes disponibles en la ruta actual.');
+      if(editingNcId){
+        const reg = historialNc.find(x => x.id === editingNcId);
+        if(reg) $('#save-nc-cliente').value = reg.cliente;
+      }
+      $('#modal-save-nc').classList.add('active');
+    }
+
+    function saveNcRecord(){
+      const cliente = $('#save-nc-cliente').value;
+      if(!cliente) return alert('Selecciona un cliente.');
+      const draft = currentNcDraft();
+      const payload = { ...draft, cliente };
+      if(editingNcId){
+        historialNc = historialNc.map(x => x.id === editingNcId ? { ...x, ...payload } : x);
+      } else {
+        historialNc.push({ id: uid(), ...payload });
+      }
+      save(KEY_NC, historialNc);
+      $('#modal-save-nc').classList.remove('active');
+      clearNcDraft();
+      activeHistoryTab = 'nc';
+      switchTab('ventas');
+    }
+
+    function clearNcDraft(){
+      cart = [];
+      canal = 'Canal Detalle';
+      motivoKey = '50';
+      query = '';
+      editingNcId = null;
+      $('#search').value = '';
+      renderNc();
+    }
+
+    function openViewNc(id){
+      const reg = historialNc.find(x => x.id === id);
+      if(!reg) return;
+      $('#view-nc-body').innerHTML = `
+        <div class="history-name">${esc(reg.cliente)}</div>
+        <div class="history-meta">Canal: ${esc(reg.canal)}</div>
+        <div class="history-meta">Motivo: ${esc(reg.motivo)}</div>
+        <div class="history-meta">Fecha: ${esc(reg.fecha)}</div>
+        <div class="mt-8"><strong>Lista de productos</strong></div>
+        <ul class="detail-list">${reg.productos.map(p => `<li>${esc(p.name)} · ${p.qty} × ${Q(p.precio)} = ${Q(p.total)}</li>`).join('')}</ul>
+        <div class="history-meta mt-8">Subtotal: ${Q(reg.subtotal)}</div>
+        <div class="history-total">Total: ${Q(reg.total)}</div>`;
+      $('#modal-view-nc').classList.add('active');
+    }
+
+    function editNc(id){
+      const reg = historialNc.find(x => x.id === id);
+      if(!reg) return;
+      editingNcId = id;
+      canal = reg.canal;
+      motivoKey = reg.motivoKey || (reg.motivo === 'Falla del generador' ? '100' : '50');
+      cart = reg.productos.map(p => ({name:p.name, qty:p.qty}));
+      query = '';
+      $('#search').value = '';
+      switchTab('nc');
+    }
+
+    function askDeleteNc(id){
+      deleteNcId = id;
+      $('#modal-delete-nc').classList.add('active');
+    }
+
+    function confirmDeleteNc(){
+      if(!deleteNcId) return;
+      historialNc = historialNc.filter(x => x.id !== deleteNcId);
+      save(KEY_NC, historialNc);
+      deleteNcId = null;
+      $('#modal-delete-nc').classList.remove('active');
+      renderAll();
     }
 
     function runTests(){
@@ -433,6 +576,10 @@
     $('#edit-cancel').onclick = () => $('#modal-edit').classList.remove('active');
     $('#modal-edit').onclick = e => { if(e.target.id === 'modal-edit') $('#modal-edit').classList.remove('active'); };
     $('#toggle-db').onclick = () => { $('#db-list').classList.toggle('hidden'); if(!$('#db-list').classList.contains('hidden')) renderDb(); };
+
+    $('#hist-tab-ventas').onclick = () => { activeHistoryTab = 'ventas'; renderHistorial(); };
+    $('#hist-tab-nc').onclick = () => { activeHistoryTab = 'nc'; renderHistorial(); };
+
     $('#cfg-mes').innerHTML = meses.map((n,i) => `<option value="${i+1}">${n}</option>`).join('');
     $('#cfg-anio').innerHTML = Array.from({length:6},(_,k) => cfg.anio - 1 + k).map(y => `<option value="${y}">${y}</option>`).join('');
     $('#cfg-mes').value = cfg.mes; $('#cfg-anio').value = cfg.anio;
@@ -451,16 +598,26 @@
         vscMeta:Math.max(0,+$('#cfg-vsc').value || 0)
       };
       save(KEY_CFG, cfg);
-      $('#cfg-ruta').value = cfg.ruta;
-      $('#cfg-dias').value = cfg.dias;
-      $('#cfg-presupuesto').value = cfg.presupuesto;
-      $('#cfg-vsc').value = cfg.vscMeta;
       renderAll();
       alert('Configuración guardada');
     };
     $('#btn-reset').onclick = () => { if(!confirm('Esto borrará todas las ventas del mes actual. ¿Continuar?')) return; sales = sales.filter(v => !(v.ruta===cfg.ruta && v.anio===cfg.anio && v.mes===cfg.mes)); save(KEY_SALES, sales); renderAll(); };
+
     $('#search').oninput = e => { query = e.target.value; renderNc(); };
-    $('#btnClear').onclick = () => { cart = []; renderNc(); };
+    $('#btnClear').onclick = clearNcDraft;
+    $('#btnEnviarNc').onclick = () => alert('La función Enviar queda lista para conectarse sin afectar el guardado de NC.');
+    $('#btnGuardarNc').onclick = openSaveNcModal;
+    $('#save-nc-cancel').onclick = () => $('#modal-save-nc').classList.remove('active');
+    $('#save-nc-confirm').onclick = saveNcRecord;
+    $('#modal-save-nc').onclick = e => { if(e.target.id === 'modal-save-nc') $('#modal-save-nc').classList.remove('active'); };
+
+    $('#view-nc-close').onclick = () => $('#modal-view-nc').classList.remove('active');
+    $('#modal-view-nc').onclick = e => { if(e.target.id === 'modal-view-nc') $('#modal-view-nc').classList.remove('active'); };
+
+    $('#delete-nc-cancel').onclick = () => { deleteNcId = null; $('#modal-delete-nc').classList.remove('active'); };
+    $('#delete-nc-confirm').onclick = confirmDeleteNc;
+    $('#modal-delete-nc').onclick = e => { if(e.target.id === 'modal-delete-nc') { deleteNcId = null; $('#modal-delete-nc').classList.remove('active'); } };
+
     $('#btnOpenCanal').onclick = () => $('#canalModal').classList.remove('hidden');
     $('#btnCloseCanal').onclick = () => $('#canalModal').classList.add('hidden');
     $('#canalModal').onclick = e => { if(e.target.id === 'canalModal') $('#canalModal').classList.add('hidden'); };
@@ -471,9 +628,7 @@
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(err => {
-          console.warn('No se pudo registrar el service worker:', err);
-        });
+        navigator.serviceWorker.register('sw.js').catch(err => console.warn('No se pudo registrar el service worker:', err));
       });
     }
 
