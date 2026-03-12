@@ -183,7 +183,13 @@
     const $ = s => document.querySelector(s);
     const $$ = s => [...document.querySelectorAll(s)];
     const Q = n => new Intl.NumberFormat('es-GT',{style:'currency',currency:'GTQ',minimumFractionDigits:2}).format(n || 0);
-    const todayStr = () => new Date().toISOString().slice(0,10);
+    const todayStr = () => {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+};
     const uid = () => crypto.randomUUID ? crypto.randomUUID() : `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     const save = (k,v) => localStorage.setItem(k, JSON.stringify(v));
     const load = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
