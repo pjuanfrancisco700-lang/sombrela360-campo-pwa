@@ -508,10 +508,21 @@
     }
 
     function openViewNc(id){
-      const reg = historialNc.find(x => x.id === id);
-      if(!reg) return;
-      setHTML('#view-nc-body', `<div class="history-name">${esc(reg.cliente)}</div><div class="history-meta">Canal: ${esc(reg.canal)}</div><div class="history-meta">Motivo: ${esc(reg.motivo)}</div><div class="history-meta">Fecha: ${esc(reg.fecha)}</div><div class="mt-8"><strong>Lista de productos</strong></div><ul class="detail-list">${reg.productos.map(p => `<li>${esc(p.name)} · ${p.qty} × ${Q(p.precio)} = ${Q(p.total)}</li>`).join('')}</ul><div class="history-meta mt-8">Subtotal: ${Q(reg.subtotal)}</div><div class="history-total">Total: ${Q(reg.total)}</div>`);
-      show('#modal-view-nc');
+  const reg = historialNc.find(x => x.id === id);
+  if(!reg) return;
+  setHTML('#view-nc-body', `
+    <div class="history-name">${esc(reg.cliente)}</div>
+    <div class="history-meta">Canal: ${esc(reg.canal)}</div>
+    <div class="history-meta">Motivo: ${esc(reg.motivo)}</div>
+    <div class="history-meta">Fecha: ${esc(reg.fecha)}</div>
+    <div class="mt-8"><strong>Lista de productos</strong></div>
+    <ul class="detail-list">
+      ${reg.productos.map(p => `<li>${esc(p.name)} · ${p.qty} × ${Q(p.precio)} = ${Q(p.total)}</li>`).join('')}
+    </ul>
+    <div class="history-meta mt-8">Subtotal: ${Q(reg.total)}</div>
+    <div class="history-total">Total: ${Q(reg.subtotal)}</div>
+  `);
+  show('#modal-view-nc');
     }
 
     function editNc(id){
