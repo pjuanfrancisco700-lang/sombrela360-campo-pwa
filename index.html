@@ -563,15 +563,18 @@
           show('#modal-delete-nc', false);
         }
       };
+
       $('#btnOpenCanal').onclick = () => $('#canalModal').classList.remove('hidden');
       $('#btnCloseCanal').onclick = () => $('#canalModal').classList.add('hidden');
       $('#canalModal').onclick = e => { if(e.target.id === 'canalModal') $('#canalModal').classList.add('hidden'); };
+
       $$('.canal-option').forEach(b => b.onclick = () => { canal = b.dataset.canal; renderNc(); });
       $$('.motivo-option').forEach(b => b.onclick = () => {
         motivoKey = b.dataset.motivo;
         renderNc();
         $('#canalModal').classList.add('hidden');
       });
+
       $('#list').onclick = e => {
         const btn = e.target.closest('[data-add]');
         if(!btn) return;
@@ -581,6 +584,7 @@
         else cart.push({ name, qty:1 });
         renderNc();
       };
+
       $('#cart').onclick = e => {
         const dec = e.target.closest('[data-dec]');
         const inc = e.target.closest('[data-inc]');
