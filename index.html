@@ -199,7 +199,7 @@
               <div class="nc-k full"><div class="label">Monto visible en pantalla</div><div id="aplicar" class="value" style="font-size:20px">Q0.00</div><div class="nc-note">Nota: aquí puede seguir mostrándose el cálculo del <span id="motivoPct">50</span>%.</div></div>
             </div>
             <div class="toolbar">
-              <button class="btn primary" id="btnEnviarNc">Enviar</button>
+              <button class="btn primary hidden" id="btnEnviarNc" type="button" aria-hidden="true" tabindex="-1">Enviar</button>
               <button class="btn icon" id="btnGuardarNc" title="Guardar NC" aria-label="Guardar NC">💾</button>
             </div>
           </div>
@@ -278,7 +278,7 @@
     }
 
     function buildClientSelects(){
-      const list = ($('#venta-tipo').value === 'congelador' ? routeData().congelador : routeData().sin);
+      const list = (($('#venta-tipo') || {}).value === 'congelador' ? routeData().congelador : routeData().sin);
       $('#venta-cliente').innerHTML = list.length ? list.map(n => `<option>${esc(n)}</option>`).join('') : '<option value="">Sin clientes</option>';
     }
 
@@ -418,9 +418,7 @@
       renderAll();
     }
 
-    const PRODUCTOS = [
-      {name:'Fresa', detalle:4.50, super24:4.19, cruzVerde:0},{name:'Guanaba', detalle:4.50, super24:4.19, cruzVerde:0},{name:'Mora', detalle:4.50, super24:4.19, cruzVerde:0},{name:'Jocote', detalle:4.50, super24:4.19, cruzVerde:0},{name:'Mango Verde Pepitoria', detalle:4.50, super24:4.19, cruzVerde:0},{name:'Limon Dieta', detalle:6.30, super24:0, cruzVerde:0},{name:'Mandarina Dieta', detalle:6.30, super24:0, cruzVerde:0},{name:'Fresa Dieta', detalle:6.30, super24:0, cruzVerde:0},{name:'Mango Dieta', detalle:6.30, super24:0, cruzVerde:0},{name:'Yogurt de Fresa', detalle:6.30, super24:0, cruzVerde:0},{name:'Yogurt de Melocoton', detalle:6.30, super24:0, cruzVerde:0},{name:'Vainilla', detalle:4.50, super24:0, cruzVerde:0},{name:'Chocolate', detalle:4.50, super24:0, cruzVerde:0},{name:'Limon', detalle:4.50, super24:4.50, cruzVerde:0},{name:'Mandarina', detalle:4.50, super24:0, cruzVerde:0},{name:'Mango', detalle:4.50, super24:4.50, cruzVerde:0},{name:'Naranja con Pepitoria', detalle:4.50, super24:0, cruzVerde:0},{name:'Piña con Pepitoria', detalle:4.50, super24:0, cruzVerde:0},{name:'Tamarindo con Tajin', detalle:4.50, super24:0, cruzVerde:0},{name:'Nance', detalle:4.50, super24:0, cruzVerde:0},{name:'Paleta de Nutela', detalle:7.50, super24:0, cruzVerde:0},{name:'Paleta Morena', detalle:5.25, super24:0, cruzVerde:0},{name:'Paleta Chocolate Crispy', detalle:4.50, super24:4.19, cruzVerde:0},{name:'Paleta Chocolate Cream', detalle:3.75, super24:0, cruzVerde:0},{name:'Paleta de Mantequilla de Mani', detalle:7.50, super24:0, cruzVerde:0},{name:'Chocobanano Con Mani P', detalle:5.25, super24:4.87, cruzVerde:0},{name:'Chocobanano Sin Mani P', detalle:4.50, super24:4.50, cruzVerde:0},{name:'Cholapiz', detalle:1.87, super24:0, cruzVerde:0},{name:'Arcoiris', detalle:2.25, super24:2.09, cruzVerde:0},{name:'Twist Arcoiris', detalle:3.75, super24:3.48, cruzVerde:0},{name:'Mixta Piñata', detalle:0.75, super24:0, cruzVerde:0},{name:'Cremosa Mandarina', detalle:3.00, super24:2.79, cruzVerde:0},{name:'Cremosa Uva', detalle:3.00, super24:0, cruzVerde:0},{name:'Cremosa Granadina', detalle:3.00, super24:2.79, cruzVerde:0},{name:'Cremosa Frambuesa', detalle:3.00, super24:2.78, cruzVerde:0},{name:'Cremosa Arandano', detalle:3.00, super24:2.78, cruzVerde:0},{name:'Twist Sipi Manzana Limon', detalle:3.75, super24:3.48, cruzVerde:0},{name:'Twist Sipi Punch Uva', detalle:3.75, super24:3.48, cruzVerde:0},{name:'Morena Cookies And Cream', detalle:6.00, super24:0, cruzVerde:0},{name:'Morena Con Cajeta', detalle:6.00, super24:0, cruzVerde:0},{name:'Paleta Coco', detalle:0, super24:4.19, cruzVerde:0},{name:'Chocobanano Mixto', detalle:0, super24:26.00, cruzVerde:0},{name:'Chocobanano Con Mani G', detalle:0, super24:8.40, cruzVerde:0},{name:'Paleta Vainilla', detalle:0, super24:4.50, cruzVerde:0},{name:'Caja Chapina', detalle:0, super24:22.97, cruzVerde:0},{name:'Helado Paleta Arcoiris', detalle:0, super24:2.09, cruzVerde:0},{name:'Helado Paleta Chocolate Crispy', detalle:0, super24:4.19, cruzVerde:0}
-    ];
+    const PRODUCTOS = [];
     const MOTIVOS = {'50':{label:'Falta de energía eléctrica',factor:.5},'100':{label:'Falla del generador',factor:1}};
     let canal = 'Canal Detalle', motivoKey = '50', cart = [], query = '';
 
@@ -599,41 +597,4 @@
       };
       save(KEY_CFG, cfg);
       renderAll();
-      alert('Configuración guardada');
-    };
-    $('#btn-reset').onclick = () => { if(!confirm('Esto borrará todas las ventas del mes actual. ¿Continuar?')) return; sales = sales.filter(v => !(v.ruta===cfg.ruta && v.anio===cfg.anio && v.mes===cfg.mes)); save(KEY_SALES, sales); renderAll(); };
-
-    $('#search').oninput = e => { query = e.target.value; renderNc(); };
-    $('#btnClear').onclick = clearNcDraft;
-    $('#btnEnviarNc').onclick = () => alert('La función Enviar queda lista para conectarse sin afectar el guardado de NC.');
-    $('#btnGuardarNc').onclick = openSaveNcModal;
-    $('#save-nc-cancel').onclick = () => $('#modal-save-nc').classList.remove('active');
-    $('#save-nc-confirm').onclick = saveNcRecord;
-    $('#modal-save-nc').onclick = e => { if(e.target.id === 'modal-save-nc') $('#modal-save-nc').classList.remove('active'); };
-
-    $('#view-nc-close').onclick = () => $('#modal-view-nc').classList.remove('active');
-    $('#modal-view-nc').onclick = e => { if(e.target.id === 'modal-view-nc') $('#modal-view-nc').classList.remove('active'); };
-
-    $('#delete-nc-cancel').onclick = () => { deleteNcId = null; $('#modal-delete-nc').classList.remove('active'); };
-    $('#delete-nc-confirm').onclick = confirmDeleteNc;
-    $('#modal-delete-nc').onclick = e => { if(e.target.id === 'modal-delete-nc') { deleteNcId = null; $('#modal-delete-nc').classList.remove('active'); } };
-
-    $('#btnOpenCanal').onclick = () => $('#canalModal').classList.remove('hidden');
-    $('#btnCloseCanal').onclick = () => $('#canalModal').classList.add('hidden');
-    $('#canalModal').onclick = e => { if(e.target.id === 'canalModal') $('#canalModal').classList.add('hidden'); };
-    $$('.canal-option').forEach(b => b.onclick = () => { canal = b.dataset.canal; renderNc(); });
-    $$('.motivo-option').forEach(b => b.onclick = () => { motivoKey = b.dataset.motivo; renderNc(); $('#canalModal').classList.add('hidden'); });
-    $('#list').onclick = e => { const b = e.target.closest('[data-add]'); if(!b) return; const name = b.dataset.add; const f = cart.find(i => i.name === name); if(f) f.qty++; else cart.push({name, qty:1}); renderNc(); };
-    $('#cart').onclick = e => { const d = e.target.closest('[data-dec]'), i = e.target.closest('[data-inc]'), r = e.target.closest('[data-remove]'); const name = d?.dataset.dec || i?.dataset.inc || r?.dataset.remove; if(!name) return; const f = cart.find(x => x.name === name); if(d && f) f.qty--; if(i && f) f.qty++; if(r) cart = cart.filter(x => x.name !== name); cart = cart.filter(x => x.qty > 0); renderNc(); };
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(err => console.warn('No se pudo registrar el service worker:', err));
-      });
-    }
-
-    runTests();
-    renderAll();
-  </script>
-</body>
-</html>
+      alert
