@@ -597,4 +597,93 @@
       };
       save(KEY_CFG, cfg);
       renderAll();
-      alert
+      alert('Configuración guardada');
+    };
+
+    $('#btn-reset').onclick = () => {
+      if(!confirm('Esto borrará todas las ventas del mes actual. ¿Continuar?')) return;
+      sales = sales.filter(v => !(v.ruta===cfg.ruta && v.anio===cfg.anio && v.mes===cfg.mes));
+      save(KEY_SALES, sales);
+      renderAll();
+    };
+
+    $('#search').oninput = e => {
+      query = e.target.value;
+      renderNc();
+    };
+    $('#btnClear').onclick = clearNcDraft;
+    $('#btnEnviarNc').onclick = () => alert('La función Enviar queda lista para conectarse sin afectar el guardado de NC.');
+    $('#btnGuardarNc').onclick = openSaveNcModal;
+    $('#save-nc-cancel').onclick = () => $('#modal-save-nc').classList.remove('active');
+    $('#save-nc-confirm').onclick = saveNcRecord;
+    $('#modal-save-nc').onclick = e => {
+      if(e.target.id === 'modal-save-nc') $('#modal-save-nc').classList.remove('active');
+    };
+
+    $('#view-nc-close').onclick = () => $('#modal-view-nc').classList.remove('active');
+    $('#modal-view-nc').onclick = e => {
+      if(e.target.id === 'modal-view-nc') $('#modal-view-nc').classList.remove('active');
+    };
+
+    $('#delete-nc-cancel').onclick = () => {
+      deleteNcId = null;
+      $('#modal-delete-nc').classList.remove('active');
+    };
+    $('#delete-nc-confirm').onclick = confirmDeleteNc;
+    $('#modal-delete-nc').onclick = e => {
+      if(e.target.id === 'modal-delete-nc') {
+        deleteNcId = null;
+        $('#modal-delete-nc').classList.remove('active');
+      }
+    };
+
+    $('#btnOpenCanal').onclick = () => $('#canalModal').classList.remove('hidden');
+    $('#btnCloseCanal').onclick = () => $('#canalModal').classList.add('hidden');
+    $('#canalModal').onclick = e => {
+      if(e.target.id === 'canalModal') $('#canalModal').classList.add('hidden');
+    };
+    $$('.canal-option').forEach(b => b.onclick = () => {
+      canal = b.dataset.canal;
+      renderNc();
+    });
+    $$('.motivo-option').forEach(b => b.onclick = () => {
+      motivoKey = b.dataset.motivo;
+      renderNc();
+      $('#canalModal').classList.add('hidden');
+    });
+
+    $('#list').onclick = e => {
+      const b = e.target.closest('[data-add]');
+      if(!b) return;
+      const name = b.dataset.add;
+      const f = cart.find(i => i.name === name);
+      if(f) f.qty++;
+      else cart.push({name, qty:1});
+      renderNc();
+    };
+
+    $('#cart').onclick = e => {
+      const d = e.target.closest('[data-dec]');
+      const i = e.target.closest('[data-inc]');
+      const r = e.target.closest('[data-remove]');
+      const name = d?.dataset.dec || i?.dataset.inc || r?.dataset.remove;
+      if(!name) return;
+      const f = cart.find(x => x.name === name);
+      if(d && f) f.qty--;
+      if(i && f) f.qty++;
+      if(r) cart = cart.filter(x => x.name !== name);
+      cart = cart.filter(x => x.qty > 0);
+      renderNc();
+    };
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.warn('No se pudo registrar el service worker:', err));
+      });
+    }
+
+    runTests();
+    renderAll();
+  </script>
+</body>
+</html>
