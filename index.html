@@ -317,7 +317,7 @@
       }
 
       const list = currentNc();
-      setHTML('#historial-wrap', list.length ? list.map(v => `<div class="history-item"><div class="history-name">${esc(v.cliente)}</div><div class="history-meta">Canal: ${esc(v.canal)}</div><div class="history-meta">Motivo: ${esc(v.motivo)}</div><div class="history-total">Total: ${Q(v.total)}</div><div class="history-actions"><button class="btn" data-view-nc="${v.id}">Ver</button><button class="btn" data-edit-nc="${v.id}">Editar</button><button class="btn danger" data-del-nc="${v.id}">Borrar</button></div></div>`).join('') : '<div class="muted mt-8">Aún no hay registros NC guardados.</div>');
+      setHTML('#historial-wrap', list.length ? list.map(v => `<div class="history-item"><div class="history-name">${esc(v.cliente)}</div><div class="history-meta">Canal: ${esc(v.canal)}</div><div class="history-meta">Motivo: ${esc(v.motivo)}</div><div class="history-total">Total cambios: ${Q(v.subtotal)}</div><div class="history-actions"><button class="btn" data-view-nc="${v.id}">Ver</button><button class="btn" data-edit-nc="${v.id}">Editar</button><button class="btn danger" data-del-nc="${v.id}">Borrar</button></div></div>`).join('') : '<div class="muted mt-8">Aún no hay registros NC guardados.</div>');
       $$('[data-view-nc]').forEach(b => b.onclick = () => openViewNc(b.dataset.viewNc));
       $$('[data-edit-nc]').forEach(b => b.onclick = () => editNc(b.dataset.editNc));
       $$('[data-del-nc]').forEach(b => b.onclick = () => askDeleteNc(b.dataset.delNc));
