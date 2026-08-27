@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no"
+  />
+
+  <meta name="theme-color" content="#f6f8fb" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Sombrela 360" />
+
+  <title>Sombrela 360</title>
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/icon-192.png" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <link rel="preload" href="assets/background-app.png" as="image" />
+
+  <link rel="stylesheet" href="styles.css?v=4.0.0" />
+</head>
+
+<body>
+  <div id="app"></div>
+  <div id="modal-root"></div>
+  <div id="toast-root" aria-live="polite"></div>
+
+  <!--
+    Migración única a la versión nueva.
+    Borra únicamente datos locales identificados como Sombrela,
+    sin limpiar el almacenamiento completo del dominio.
+  -->
+  <script>
+    (() => {
+      const MIGRATION_KEY = "sombrela360_reset_v4_0_0";
+
+      try {
+        if (localStorage.getItem(MIGRATION_KEY) !== "1") {
+          const keysToRemove = [];
+
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i) || "";
+            const normalized = key.toLowerCase();
+
+            if (
+              normalized.startsWith("s360_") ||
+              normalized.startsWith("sombrela360_") ||
+              normalized.startsWith("sombrela365_")
+            ) {
+              keysToRemove.push(key);
+            }
+          }
+
+          keysToRemove.forEach(key => localStorage.removeItem(key));
+          localStorage.setItem(MIGRATION_KEY, "1");
+        }
+      } catch (error) {
+        console.warn("No se pudo completar la limpieza local de migración:", error);
+      }
+    })();
+  </script>
+
+  <script src="config.js?v=4.0.0"></script>
+  <script src="app.js?v=4.0.0"></script>
+</body>
+</html>
