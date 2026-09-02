@@ -175,6 +175,72 @@
     bootstrapAt:0,
   };
 
+  // ---------- LOCAL FAST CACHE ----------
+  // Fase 1: conserva la última carga válida para que una sesión existente
+  // pueda mostrar la interfaz inmediatamente y refrescarse en segundo plano.
+  const BOOTSTRAP_CACHE_KEY='s360_bootstrap_cache_v1';
+  const HISTORY_CACHE_KEY='s360_history_cache_v1';
+  const NC_CATALOG_PERSIST_KEY='s360_nc_catalog_cache_v1';
+  const BOOTSTRAP_CACHE_MAX_AGE_MS=Number(CONFIG.BOOTSTRAP_CACHE_MAX_AGE_MS||24*60*60*1000);
+  const HISTORY_CACHE_MAX_AGE_MS=Number(CONFIG.HISTORY_CACHE_MAX_AGE_MS||12*60*60*1000);
+
+  function readJsonStorage(key,fallback=null){
+    try{
+      const value=JSON.parse(localStorage.getItem(key)||'null');
+      return value??fallback;
+    }catch{return fallback;}
+  }
+
+  function writeJsonStorage(key,value){
+    try{localStorage.setItem(key,JSON.stringify(value));return true;}catch{return false;}
+  }
+
+  function clearFastLocalCaches(){
+    try{
+      localStorage.removeItem(BOOTSTRAP_CACHE_KEY);
+      localStorage.removeItem(HISTORY_CACHE_KEY);
+      localStorage.removeItem(NC_CATALOG_PERSIST_KEY);
+    }catch{}
+  }
+
+  function writeBootstrapCache(data){
+    if(!state.session?.token||!data?.user) return;
+    writeJsonStorage(BOOTSTRAP_CACHE_KEY,{
+      token:String(state.session.token),
+      route:String(data.user.RUTA||''),
+      savedAt:Date.now(),
+      data
+    });
+  }
+
+  function readBootstrapCache(){
+    const entry=readJsonStorage(BOOTSTRAP_CACHE_KEY);
+    if(!entry||!state.session?.token) return null;
+    if(String(entry.token||'')!==String(state.session.token)) return null;
+    if(Date.now()-Number(entry.savedAt||0)>BOOTSTRAP_CACHE_MAX_AGE_MS) return null;
+    return entry.data&&entry.data.user?entry.data:null;
+  }
+
+  function historyCacheForCurrentUser(){
+    const entry=readJsonStorage(HISTORY_CACHE_KEY);
+    if(!entry||!state.session?.token||!state.user) return null;
+    if(String(entry.token||'')!==String(state.session.token)) return null;
+    if(String(entry.route||'')!==String(state.user.RUTA||'')) return null;
+    if(Date.now()-Number(entry.savedAt||0)>HISTORY_CACHE_MAX_AGE_MS) return null;
+    return Array.isArray(entry.items)?entry.items:null;
+  }
+
+  function writeHistoryCache(items){
+    if(!state.session?.token||!state.user||!Array.isArray(items)) return;
+    writeJsonStorage(HISTORY_CACHE_KEY,{
+      token:String(state.session.token),
+      route:String(state.user.RUTA||''),
+      savedAt:Date.now(),
+      items
+    });
+  }
+
+
 
   // ---------- PENDING SALES / BACKGROUND SYNC ----------
   // Las ventas se guardan primero en el dispositivo y luego se sincronizan
@@ -632,6 +698,7 @@
 
   function clearLocalSession(){
     localStorage.removeItem('s360_session');
+    clearFastLocalCaches();
     state.session=null;
     state.user=null;
     state.data=null;
@@ -731,10 +798,11 @@
       </section>`;
   }
 
-  function applyBootstrapData(data){
+  function applyBootstrapData(data,{resetView=true,persist=true}={}){
+    const previousView=state.view;
     state.data=data;
     state.user=data.user;
-    state.view='inicio';
+    state.view=resetView?'inicio':previousView;
     state.bootstrapAt=Date.now();
 
     if(data.sessionExpiresAt){
@@ -746,21 +814,62 @@
         .filter(d=>d.DIA_PROGRAMADO==='SI')
         .map(d=>String(d.FECHA).slice(0,10))
     );
+
+    if(persist) writeBootstrapCache(data);
   }
 
-  function finishInitialLoad(data){
-    applyBootstrapData(data);
+  function scheduleWarmup(){
+    // Se ejecuta después de mostrar la interfaz; nunca bloquea el ingreso.
+    setTimeout(()=>{
+      if(CONFIG.PRELOAD_NC_CATALOGS!==false) void preloadNcCatalogs();
+      void syncPendingSales({notify:false});
+    },250);
+  }
+
+  function finishInitialLoad(data,{fromCache=false}={}){
+    applyBootstrapData(data,{resetView:true,persist:!fromCache});
     renderShell();
     hideLoader();
+    scheduleWarmup();
+  }
 
-    // No bloquea la entrada a la app. Si quedaron ventas pendientes,
-    // se intentan enviar después de mostrar la interfaz.
-    void syncPendingSales({notify:false});
+  async function refreshBootstrapInBackground(){
+    const expectedToken=String(state.session?.token||'');
+    const expectedRoute=String(state.user?.RUTA||'');
+    if(!expectedToken||!expectedRoute) return false;
+
+    try{
+      const data=await api.request('bootstrap',{});
+      if(String(state.session?.token||'')!==expectedToken) return false;
+      if(String(data.user?.RUTA||'')!==expectedRoute) return false;
+      const currentView=state.view;
+      applyBootstrapData(data,{resetView:false,persist:true});
+      state.view=currentView;
+      navigate(currentView,false);
+      return true;
+    }catch(err){
+      if(isSessionAuthError(err)){
+        clearLocalSession();
+        hideLoader();
+        renderLogin();
+        toast('Tu sesión de 24 horas finalizó. Ingresa nuevamente.','error');
+      }
+      return false;
+    }
   }
 
   async function loadSession(){
-    showInitialLoader();
+    const cached=readBootstrapCache();
 
+    // Si ya tenemos una carga válida de esta misma sesión, abrimos la app
+    // inmediatamente. La verificación con Sheets ocurre por detrás.
+    if(cached){
+      finishInitialLoad(cached,{fromCache:true});
+      void refreshBootstrapInBackground();
+      return true;
+    }
+
+    showInitialLoader();
     try{
       const data=await api.request('bootstrap',{});
       finishInitialLoad(data);
@@ -774,8 +883,6 @@
         return false;
       }
 
-      // Antes este error podía dejar el loader cubriendo la pantalla aunque
-      // la petición ya hubiera fallado. Ahora siempre cambia a estado recuperable.
       showInitialLoader(true);
       throw err;
     }
@@ -971,23 +1078,38 @@ if(resetScroll){
       return true;
     });
   }
-  async function renderHistory(){
-    $('#page').innerHTML=`<section class="page history-page"><div class="page-head"><div><h2>Historial</h2><p>Ventas y notas de crédito registradas.</p></div><div class="page-head-actions"><button class="icon-btn" data-action="refresh" aria-label="Actualizar" title="Actualizar">${icon('refresh',20)}</button><button class="icon-btn" data-action="back-sales" aria-label="Volver">${icon('back',21)}</button></div></div><div class="card"><div class="muted small">Cargando historial...</div></div></section>`;
-    try{
-      const items=await api.request('history',{}); state.history=items;
-      const months=[...new Set(items.map(x=>String(x.FECHA||'').slice(0,7)).filter(Boolean))].sort().reverse();
-      $('#page').innerHTML=`<section class="page history-page">
-        <div class="page-head"><div><h2>Historial</h2><p>Ventas y notas de crédito registradas.</p></div><div class="page-head-actions"><button class="icon-btn" data-action="refresh" aria-label="Actualizar" title="Actualizar">${icon('refresh',20)}</button><button class="icon-btn" data-action="back-sales" aria-label="Volver">${icon('back',21)}</button></div></div>
-        <div class="search" style="margin-bottom:9px"><span>${icon('search',18)}</span><input id="history-search" value="${esc(state.historySearch)}" placeholder="Buscar en historial..."></div>
-        <div class="filter-row">
-          <select id="history-type"><option value="TODOS">Todos los tipos</option><option value="VENTA" ${state.historyType==='VENTA'?'selected':''}>Ventas</option><option value="NC" ${state.historyType==='NC'?'selected':''}>Notas de crédito</option></select>
-          <select id="history-month"><option value="TODOS">Todos los meses</option>${months.map(m=>`<option value="${m}" ${state.historyMonth===m?'selected':''}>${esc(monthLabel(m))}</option>`).join('')}</select>
-        </div>
-        <div id="history-list"></div>
-      </section>`;
-      refreshHistory();
-    }catch(err){ toast(err.message,'error'); }
+  function renderHistoryContent(items){
+    state.history=Array.isArray(items)?items:[];
+    const months=[...new Set(state.history.map(x=>String(x.FECHA||'').slice(0,7)).filter(Boolean))].sort().reverse();
+    $('#page').innerHTML=`<section class="page history-page">
+      <div class="page-head"><div><h2>Historial</h2><p>Ventas y notas de crédito registradas.</p></div><div class="page-head-actions"><button class="icon-btn" data-action="refresh" aria-label="Actualizar" title="Actualizar">${icon('refresh',20)}</button><button class="icon-btn" data-action="back-sales" aria-label="Volver">${icon('back',21)}</button></div></div>
+      <div class="search" style="margin-bottom:9px"><span>${icon('search',18)}</span><input id="history-search" value="${esc(state.historySearch)}" placeholder="Buscar en historial..."></div>
+      <div class="filter-row">
+        <select id="history-type"><option value="TODOS">Todos los tipos</option><option value="VENTA" ${state.historyType==='VENTA'?'selected':''}>Ventas</option><option value="NC" ${state.historyType==='NC'?'selected':''}>Notas de crédito</option></select>
+        <select id="history-month"><option value="TODOS">Todos los meses</option>${months.map(m=>`<option value="${m}" ${state.historyMonth===m?'selected':''}>${esc(monthLabel(m))}</option>`).join('')}</select>
+      </div>
+      <div id="history-list"></div>
+    </section>`;
+    refreshHistory();
   }
+
+  async function renderHistory(){
+    const cached=historyCacheForCurrentUser();
+    if(cached){
+      renderHistoryContent(cached);
+    }else{
+      $('#page').innerHTML=`<section class="page history-page"><div class="page-head"><div><h2>Historial</h2><p>Ventas y notas de crédito registradas.</p></div><div class="page-head-actions"><button class="icon-btn" data-action="refresh" aria-label="Actualizar" title="Actualizar">${icon('refresh',20)}</button><button class="icon-btn" data-action="back-sales" aria-label="Volver">${icon('back',21)}</button></div></div><div class="card"><div class="muted small">Cargando historial...</div></div></section>`;
+    }
+
+    try{
+      const items=await api.request('history',{});
+      writeHistoryCache(items);
+      if(state.view==='ventas-history') renderHistoryContent(items);
+    }catch(err){
+      if(!cached) toast(err.message,'error');
+    }
+  }
+
   function refreshHistory(){
     const root=$('#history-list'); if(!root) return;
     const arr=historyFiltered(state.history||[]);
@@ -1065,9 +1187,27 @@ if(resetScroll){
   const ncCatalogCache=new Map();
   const ncCatalogInflight=new Map();
 
+  function readPersistentNcCatalogs(){
+    const saved=readJsonStorage(NC_CATALOG_PERSIST_KEY,{});
+    return saved&&typeof saved==='object'?saved:{};
+  }
+
+  function persistNcCatalog(channel,catalog,loadedAt=Date.now()){
+    const all=readPersistentNcCatalogs();
+    all[String(channel||'')]={catalog,loadedAt};
+    writeJsonStorage(NC_CATALOG_PERSIST_KEY,all);
+  }
+
   function cachedNcCatalog(channel){
     const key=String(channel||'');
-    const entry=ncCatalogCache.get(key);
+    let entry=ncCatalogCache.get(key);
+    if(!entry){
+      const saved=readPersistentNcCatalogs()[key];
+      if(saved){
+        entry=saved;
+        ncCatalogCache.set(key,saved);
+      }
+    }
     if(!entry) return null;
     if(Date.now()-Number(entry.loadedAt||0)>NC_CATALOG_CACHE_MS){
       ncCatalogCache.delete(key);
@@ -1087,7 +1227,9 @@ if(resetScroll){
     const request=api.request('getNcCatalog',{channel:key})
       .then(catalog=>{
         const clean=Array.isArray(catalog)?catalog:[];
-        ncCatalogCache.set(key,{catalog:clean,loadedAt:Date.now()});
+        const loadedAt=Date.now();
+        ncCatalogCache.set(key,{catalog:clean,loadedAt});
+        persistNcCatalog(key,clean,loadedAt);
         return clean;
       })
       .finally(()=>{
@@ -1095,6 +1237,13 @@ if(resetScroll){
       });
     ncCatalogInflight.set(key,request);
     return request;
+  }
+
+  async function preloadNcCatalogs(){
+    if(!state.session?.token||!state.user||!state.data) return;
+    if(typeof navigator!=='undefined'&&navigator.onLine===false) return;
+    const channels=[...new Set((state.data.channels||[]).map(c=>String(c.NOMBRE_CANAL||'').trim()).filter(Boolean))];
+    await Promise.allSettled(channels.map(channel=>getNcCatalogFast(channel)));
   }
 
   function renderNcCatalogLoading(){
@@ -1406,13 +1555,14 @@ function closeModal(){
 
   async function refreshData(message='Actualizado'){
     try{
-      ncCatalogCache.clear();
+      // Conservamos productos/precios en caché; "Actualizar" refresca los datos
+      // operativos sin obligar a descargar nuevamente el catálogo de NC.
       // Si hay ventas locales, intentamos enviarlas antes de volver a leer Sheets.
       // Así el bootstrap siguiente trae un estado lo más consistente posible.
       await syncPendingSales({notify:false});
 
-      const data=await api.request('bootstrap',{}); state.data=data; state.user=data.user; state.bootstrapAt=Date.now();
-      state.budgetDates=new Set((data.days||[]).filter(d=>d.DIA_PROGRAMADO==='SI').map(d=>String(d.FECHA).slice(0,10)));
+      const data=await api.request('bootstrap',{});
+      applyBootstrapData(data,{resetView:false,persist:true});
       navigate(state.view,false); toast(message,'success');
     }catch(err){toast(err.message,'error');}
   }
