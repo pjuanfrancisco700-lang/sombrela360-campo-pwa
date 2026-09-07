@@ -495,10 +495,10 @@
 
   const api = {
     isDemo(){ return CONFIG.DEMO_MODE || !CONFIG.API_URL; },
-    async request(action,payload={}){
-      if(this.isDemo()) return demoRequest(action,payload);
+    // Un único intento de red. Separado de request() para poder reintentarlo.
+    async _attempt(action,payload){
       const controller = new AbortController();
-      const timer=setTimeout(()=>controller.abort(),CONFIG.REQUEST_TIMEOUT_MS||18000);
+      const timer=setTimeout(()=>controller.abort(),CONFIG.REQUEST_TIMEOUT_MS||30000);
       try{
         const body=new URLSearchParams();
         body.set('action',action);
@@ -513,6 +513,26 @@
         if(err.name==='AbortError') throw new Error('La operación tardó demasiado. Intenta de nuevo.');
         throw err;
       }finally{ clearTimeout(timer); }
+    },
+    // request() reintenta UNA vez, solo ante fallas de red/timeout (no ante
+    // errores de negocio como "Usuario o contraseña incorrectos"). Es seguro
+    // porque registerSale/saveNC ya son idempotentes por ID de operación:
+    // si el primer intento sí se guardó en el backend, el reintento simplemente
+    // recibe duplicate:true en vez de crear un registro repetido.
+    async request(action,payload={}){
+      if(this.isDemo()) return demoRequest(action,payload);
+      const RETRYABLE_MESSAGES=new Set([
+        'La operación tardó demasiado. Intenta de nuevo.',
+        'Respuesta inválida del servidor'
+      ]);
+      const isRetryable=err=>err instanceof TypeError || RETRYABLE_MESSAGES.has(err?.message);
+      try{
+        return await this._attempt(action,payload);
+      }catch(err){
+        if(!isRetryable(err)) throw err;
+        await new Promise(r=>setTimeout(r,1500));
+        return await this._attempt(action,payload);
+      }
     }
   };
 
