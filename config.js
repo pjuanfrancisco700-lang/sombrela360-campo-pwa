@@ -13,7 +13,9 @@ window.SOMBRELA_CONFIG = {
   API_URL: "https://script.google.com/macros/s/AKfycbxAuCTqlMqV1y_1zM4YpFwhtyRHb5mNzm78HmaeMuijye9jbMitnAIlQqbAma6K4w/exec",
   APP_NAME: "Sombrela 360",
   DEMO_MODE: false,
-  REQUEST_TIMEOUT_MS: 18000,
+  // 30s: da margen frente a lock.waitLock(15000-20000) del backend + latencia
+  // de Apps Script, para no abortar peticiones que en realidad sí se completan.
+  REQUEST_TIMEOUT_MS: 30000,
   BOOTSTRAP_CACHE_MAX_AGE_MS: 24 * 60 * 60 * 1000,
   HISTORY_CACHE_MAX_AGE_MS: 12 * 60 * 60 * 1000,
   PRELOAD_NC_CATALOGS: true
