@@ -762,13 +762,6 @@
     document.addEventListener('change',handleChange);
     document.addEventListener('submit',handleSubmit);
 
-    // Fix visual: en iOS Safari, el estado :active de CSS (usado por .icon-btn,
-    // .btn, .nav-btn, etc.) no se dispara al tocar si no hay ningún listener de
-    // touchstart en el documento. Este listener no hace nada por sí mismo; solo
-    // habilita el feedback visual de "presionado" que ya está definido en
-    // styles.css. No cambia ninguna lógica de clics ni de actualización.
-    document.addEventListener('touchstart',()=>{},{passive:true});
-
     window.addEventListener('online',()=>{
       if(state.session?.token&&state.user) void syncPendingSales({notify:false});
     });
