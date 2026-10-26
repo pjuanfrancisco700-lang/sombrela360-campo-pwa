@@ -5,7 +5,7 @@ const STATIC = [
   "./index.html",
   "./styles.css?v=4.1.3",
   "./config.js?v=4.1.3",
-  "./app.js?v=4.1.3",
+  "./app.js?v=4.1.4",
   "./manifest.json",
   "./assets/icon-192.png",
   "./assets/icon-512.png",
