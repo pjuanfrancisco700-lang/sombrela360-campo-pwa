@@ -1334,10 +1334,15 @@ if(resetScroll){
       ${ready?(ncCatalogLoading?`<div class="section-title"><h3>3. Productos</h3><span class="small muted">Cargando catálogo</span></div>${renderNcCatalogLoading()}`:`${draft.editId?`<div class="section-title"><h3>3. Productos seleccionados</h3><span class="small muted">${totals.units} unidades</span></div>
         ${renderNcSelectedEditor(totals.items)}
         <div class="section-title nc-add-more-title"><h3>Agregar más productos</h3><span class="small muted">Aplicación ${Math.round(Number(motive.PORCENTAJE_APLICACION)*100)}%</span></div>`:`<div class="section-title"><h3>3. Productos</h3><span class="small muted">Aplicación ${Math.round(Number(motive.PORCENTAJE_APLICACION)*100)}%</span></div>`}
-        <div class="search" style="margin-bottom:10px"><span>${icon('search',18)}</span><input id="product-search" placeholder="Buscar producto, código o precio..."></div>
+        <div class="search" style="margin-bottom:10px"><span>${icon('search',18)}</span><input id="product-search" value="${esc(draft.productSearch||'')}" placeholder="Buscar producto, código o precio..."></div>
         <div id="product-list" class="product-list">${renderProductCards(draft.editId?draft.catalog.filter(p=>!Number(draft.items[p.ID_PRODUCTO]||0)):draft.catalog, draft.editId)}</div>
         ${totals.units?`<div class="cart-bar"><div><div class="tiny" style="opacity:.7">${totals.units} unidades</div><strong>${money(totals.total)}</strong></div><button data-action="open-nc-summary">Ver resumen ${icon('chevron',17)}</button></div>`:''}`):''}
     </section>`;
+    applyNcProductFilter();
+  }
+  function applyNcProductFilter(){
+    const q=normalize(state.ncDraft.productSearch||'');
+    $$('.product-card').forEach(c=>c.style.display=(!q||(c.dataset.search||'').includes(q))?'flex':'none');
   }
   function renderProductCards(products,editing=false){
     if(!products?.length) return `<div class="empty-state"><div class="empty-icon">${icon('box',22)}</div><h3>${editing?'Sin productos por agregar':'Sin productos'}</h3><p>${editing?'Los productos seleccionados ya están arriba.':'Agrega productos y precios activos en Google Sheets.'}</p></div>`;
@@ -1716,7 +1721,8 @@ function closeModal(){
     if(e.target.id==='sales-search'){state.salesSearch=e.target.value;refreshSalesList(Boolean(state.salesSearch));}
     if(e.target.id==='history-search'){state.historySearch=e.target.value;refreshHistory();}
     if(e.target.id==='product-search'){
-      const q=normalize(e.target.value);$$('.product-card').forEach(c=>c.style.display=(!q||c.dataset.search.includes(q))?'flex':'none');
+      state.ncDraft.productSearch=e.target.value;
+      applyNcProductFilter();
     }
     if(e.target.id==='base-search'){state.clientBaseSearch=e.target.value;refreshClientBase();const inp=$('#base-search');if(inp){inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length);}}
   }
